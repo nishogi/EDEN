@@ -9,7 +9,7 @@
 
   <meta name="author" content="Franz Bertin" />
 
-  <title>Eden - Cassiopée project - 2024</title>
+  <title>Eden - Projet Cassiopée - 2024</title>
 
   <meta http-equiv="refresh" content="30">
 
