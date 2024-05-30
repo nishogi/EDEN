@@ -20,7 +20,7 @@ jobs:
         extensions: mbstring, intl, curl, dom, pdo, pdo_mysql
 
     - name: Deploy Application
-          env:
-        TARGET_PATH: ${{ secrets.TARGET_PATH }}
+        env:
+          TARGET_PATH: ${{ secrets.TARGET_PATH }}
       run: |
         find . -path ./.git -prune -o -path ./.github -prune -o -exec cp -R --parents {} $TARGET_PATH \;
