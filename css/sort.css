@@ -1,0 +1,29 @@
+#tab{
+	border: 2px solid #777777;
+	border-collapse: collapse;
+}
+#tab th,
+#tab td{
+	border: 1px solid #777777;
+	padding: 0.3em;
+}
+#tab tbody tr:nth-child(odd){
+	background: #eeeeee;
+}
+#tab tbody tr.err{
+	background: #ff7777;
+}
+#tab tbody tr:hover{
+	background: #b0b0b0;
+}
+.sort:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+.asc:hover::after{
+	content: " \25B4";
+}
+.desc:hover::after{
+	content: " \25BE";
+}
+
