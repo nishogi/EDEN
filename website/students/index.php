@@ -44,7 +44,16 @@
                             if (response.status === 'running') {
                                 clearInterval(checkStatus);
                                 Swal.close();
-                                location.reload();
+                                Swal.fire({
+                                    title: 'Succès!',
+                                    text: 'VM démarée !',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    onClose: () => {
+                                        location.reload();
+                                        }
+                                    });
+                                }
                             }
                         }
                     };
@@ -88,7 +97,16 @@
                             if (response.status === 'stopped') {
                                 clearInterval(checkStatus);
                                 Swal.close();
-                                location.reload();
+                                Swal.fire({
+                                    title: 'Succès!',
+                                    text: 'VM stopée !',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    onClose: () => {
+                                        location.reload();
+                                        }
+                                    });
+                                }
                             }
                         }
                     };
@@ -102,14 +120,16 @@
         Swal.fire({
             title: 'Clé SSH',
             input: 'textarea',
-            padding: "20px",
             inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
             inputPlaceholder: 'Entrez votre clé ssh publique ici...',
             inputAttributes: {
                 'aria-label': 'Entrez votre clé ssh publique ici',
             },
-            showCancelButton: true
-        }).then((result) => {
+            showCancelButton: true,
+            inputStyle: {
+                padding: '1rem'
+            }
+        });.then((result) => {
             if (result.isConfirmed && result.value) {
                 var sshPublicKey = result.value;
                 var xhr = new XMLHttpRequest();
