@@ -294,6 +294,7 @@
                     foreach ($userVMs as $vmName) {
                         $VMId = getVMId($vmName);
                         $status = checkVMStatus($VMId);
+                        
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
@@ -338,12 +339,14 @@
                             echo "<div class='separator'></div>";
                         }
                     }
+                    echo createVM("nrocq-CSC4101-1")
                     ?>
         </ul>
         <hr class="my-4">
       </div>
     </div>
   </div>
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
   <script src="../js/scripts.js"></script>
 </body>
