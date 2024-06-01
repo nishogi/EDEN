@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eden Students Page</title>
+    <title>EDEN - Mes VMs</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Core theme CSS (includes Bootstrap) -->
@@ -169,7 +169,7 @@
                 
             <!-- Page content -->
             <div class="container-fluid">
-                <h1 class="mt-4">Eden Students Page: <?php echo $_SERVER['REMOTE_USER']; ?></h1>
+                <h1 class="mt-4">Bienvenue sur la page de gestion de vos VM, <?php echo $_SERVER['REMOTE_USER']; ?></h1>
                 <hr class="my-4">
 
                 <p><b>Mes VM :</b></p>
