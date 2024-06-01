@@ -106,10 +106,16 @@
 
         li {
             padding: 0.5rem;
-            margin: 0 0.5rem 0.8rem 0.5rem;
+            margin: 0 0.5rem 0 0.5rem;
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 0.5rem;
+        }
+
+        .separator {
+            padding: 0.5rem 0;
+            background-color: transparent;
+            border: none;
         }
     </style>
 </head>
@@ -231,6 +237,7 @@
                         if (existingVM($VMname) == false) {
                             echo "<li class='list-group-item'>$ligne";
                             echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
+                            echo "<div class='separator'></div>"
                             echo "</li>";
                         }
                     }
