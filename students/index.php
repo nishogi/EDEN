@@ -155,7 +155,7 @@
                     </button>
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                         <li class="nav-item active">
-                            <a class="nav-link" href="https://gitlabev.imtbs-tsp.eu" target="_blank">GitLabEv</a>
+                            <a class="nav-link" href="https://github.com/Nishogi/EDEN" target="_blank">lien vers le code source</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
