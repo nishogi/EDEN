@@ -7,80 +7,132 @@
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
   <link href="../css/styles.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
         function confirmStartVM(name) {
-            var confirmation = confirm("Souhaitez-vous vraiment allumer la VM : " + name + " ?");
-            if (confirmation) {
-                // Envoi d'une requête AJAX pour démarrer la VM
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "ajax_functions.php?action=startVM&name=" + encodeURIComponent(name), true);
-                xhr.send();
+            Swal.fire({
+                title: 'Confirmation',
+                text: "Souhaitez-vous vraiment allumer la VM : " + name + " ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui, allumer!',
+                cancelButtonText: 'Non, annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Envoi d'une requête AJAX pour démarrer la VM
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "ajax_functions.php?action=startVM&name=" + encodeURIComponent(name), true);
+                    xhr.send();
 
-                // Afficher un message "Veuillez patienter" pendant 2 secondes
-                alert("Après avoir appuyé sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours de démarrage.");
-
-                // Lancer le rechargement de la page après 2 secondes
-                setTimeout(function () {
-                    location.reload();
-                }, 2000); // Temps d'attente en millisecondes (ici 2 secondes)
-            }
+                    Swal.fire({
+                        title: 'Veuillez patienter',
+                        text: 'La VM est en cours de démarrage...',
+                        timer: 2000,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                        onClose: () => {
+                            location.reload();
+                        }
+                    });
+                }
+            });
         }
 
         function confirmStopVM(name) {
-            var confirmation = confirm("Souhaitez-vous vraiment arrêter la VM : " + name + " ?");
-            if (confirmation) {
-                // Envoi d'une requête AJAX pour arrêter la VM
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "ajax_functions.php?action=stopVM&name=" + encodeURIComponent(name), true);
-                xhr.send();
+            Swal.fire({
+                title: 'Confirmation',
+                text: "Souhaitez-vous vraiment arrêter la VM : " + name + " ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui, arrêter!',
+                cancelButtonText: 'Non, annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Envoi d'une requête AJAX pour arrêter la VM
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "ajax_functions.php?action=stopVM&name=" + encodeURIComponent(name), true);
+                    xhr.send();
 
-                // Afficher un message "Veuillez patienter" pendant 2 secondes
-                alert("Après avoir appuyé sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours d'arrêt.");
-
-                // Lancer le rechargement de la page après 2 secondes
-                setTimeout(function () {
-                    location.reload();
-                }, 2000); // Temps d'attente en millisecondes (ici 2 secondes)
-            }
+                    Swal.fire({
+                        title: 'Veuillez patienter',
+                        text: 'La VM est en cours d\'arrêt...',
+                        timer: 2000,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                        onClose: () => {
+                            location.reload();
+                        }
+                    });
+                }
+            });
         }
 
         function confirmDeleteVM(name) {
-            var confirmation = confirm("Souhaitez-vous vraiment supprimer la VM : " + name + " ?");
-            if (confirmation) {
-                // Envoi d'une requête AJAX pour arrêter la VM
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "students_functions.php?action=deleteVM&name=" + encodeURIComponent(name), true);
-                xhr.send();
+            Swal.fire({
+                title: 'Confirmation',
+                text: "Souhaitez-vous vraiment supprimer la VM : " + name + " ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui, supprimer!',
+                cancelButtonText: 'Non, annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Envoi d'une requête AJAX pour supprimer la VM
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "students_functions.php?action=deleteVM&name=" + encodeURIComponent(name), true);
+                    xhr.send();
 
-                // Afficher un message "Veuillez patienter" pendant 2 secondes
-                alert("Après avoir appuyé sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours de suppression.");
-
-                // Lancer le rechargement de la page après 2 secondes
-                setTimeout(function () {
-                    location.reload();
-                }, 2000); // Temps d'attente en millisecondes (ici 2 secondes)
-            }
+                    Swal.fire({
+                        title: 'Veuillez patienter',
+                        text: 'La VM est en cours de suppression...',
+                        timer: 2000,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                        onClose: () => {
+                            location.reload();
+                        }
+                    });
+                }
+            });
         }
 
         function confirmCreateVM(vmName) {
-            var sshPublicKey = prompt("Veuillez nous transmettre votre clé ssh publique afin qu'on puisse vous transmettre vos identifiants :");
-            if (sshPublicKey != null) {
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "ajax_functions.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        // Il faudra modifier ici pour par la suite envoyer les identifiants de connexion à la VM 
-                        // et d'ailleurs les afficher autre part pour les avoir à chaque fois 
-                        // par exemple en dessous de statut avoir ssh login
-                        alert("VM créée avec succès !");
-                        alert("Réponse du serveur : " + this.responseText); // Affiche la réponse dans une alerte
-                        document.getElementById('debugInfo').innerText = this.responseText; // Ou l'affiche dans le DOM
-                        location.reload();
-                    }
-                };
-                xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
-            }
+            Swal.fire({
+                title: 'Clé SSH',
+                input: 'textarea',
+                inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
+                inputPlaceholder: 'Entrez votre clé ssh publique ici...',
+                inputAttributes: {
+                    'aria-label': 'Entrez votre clé ssh publique ici'
+                },
+                showCancelButton: true
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    var sshPublicKey = result.value;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "ajax_functions.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                            Swal.fire({
+                                title: 'Succès!',
+                                text: 'VM créée avec succès!',
+                                icon: 'success',
+                                timer: 2000,
+                                onClose: () => {
+                                    document.getElementById('debugInfo').innerText = this.responseText;
+                                    location.reload();
+                                }
+                            });
+                        }
+                    };
+                    xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
+                }
+            });
         }
   </script>
   <style>
@@ -143,7 +195,7 @@
               <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
               <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="mailto:franz.bertin@imtbs-tsp.eu">franz.bertin@imtbs-tsp.eu</a> <a class="dropdown-item" href="mailto:christophe.gaboret@imtbs-tsp.eu">christophe.gaboret@imtbs-tsp.eu</a>
-                <div class="dropdown-divider"></div><a class="dropdown-item" href="mailto:tom.burellier@telecom-sudparis.eu">tom.burellier@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:nicolas.rocq@telecom-sudparis.eu">nicolas.rocq@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:mathis.williot@telecom-sudparis.eu">mathis.williot@telecom-sudparis.eu</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item" href="mailto:tom.burellier@telecom-sudparis.eu">tom.burellier@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:nicolas.rocq@telecom-sudparis.eu">nicolas.rocq@
                 <div class="dropdown-divider"></div><a class="dropdown-item" href="mailto:olivier.berger@telecom-sudparis.eu">olivier.berger@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:arthur.jovart@telecom-sudparis.eu">arthur.jovart@telecom-sudparis.eu</a>
               </div>
             </li>
