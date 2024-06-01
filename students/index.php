@@ -111,15 +111,6 @@
             border: 1px solid #dee2e6;
             border-radius: 0.5rem;
         }
-
-        .separator {
-            height: 2px;
-            width: 50%;
-            border-width: 0;
-            color: blue;
-            background-color: blue;
-            margin: 1rem auto;
-        }
     </style>
 </head>
 
@@ -206,7 +197,6 @@
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
                         echo "</li>";
-                        echo '<div class="separator"></div>';
                     }
                     ?>
                 </ul>
@@ -242,7 +232,6 @@
                             echo "<li class='list-group-item'>$ligne";
                             echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
                             echo "</li>";
-                            echo '<div class="separator"></div>';
                         }
                     }
                     ?>
