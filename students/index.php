@@ -17,7 +17,7 @@
                 xhr.send();
 
                 // Afficher un message "Veuillez patienter" pendant 2 secondes
-                alert("Après avoir appuyer sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours de démarrage.");
+                alert("Après avoir appuyé sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours de démarrage.");
 
                 // Lancer le rechargement de la page après 2 secondes
                 setTimeout(function () {
@@ -35,7 +35,7 @@
                 xhr.send();
 
                 // Afficher un message "Veuillez patienter" pendant 2 secondes
-                alert("Après avoir appuyer sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours d'arrêt.");
+                alert("Après avoir appuyé sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours d'arrêt.");
 
                 // Lancer le rechargement de la page après 2 secondes
                 setTimeout(function () {
@@ -53,7 +53,7 @@
                 xhr.send();
 
                 // Afficher un message "Veuillez patienter" pendant 2 secondes
-                alert("Après avoir appuyer sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours de suppression.");
+                alert("Après avoir appuyé sur ok, veuillez patienter 2 secondes jusqu'au rechargement de la page, la VM est en cours de suppression.");
 
                 // Lancer le rechargement de la page après 2 secondes
                 setTimeout(function () {
@@ -164,9 +164,9 @@
 
                     // Format des noms de VM recherchés
                     $vmNamePattern = strval($_SERVER['REMOTE_USER']) . '-1';
-
+    
                     $userVMs = getVMNames($vmNamePattern);
-
+    
                     foreach ($userVMs as $vmName) {
                         $VMId = getVMId($vmName);
                         $status = checkVMStatus($VMId);
@@ -174,10 +174,10 @@
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
                         echo "<button class='btn btn-primary boutonVM'>Accéder</button>";
-                        echo "<button class='btn btn-success boutonVM' onclick="\&quot;confirmStartVM('$vmName')\&quot;">Allumer</button>";
-                        echo "<button class='btn btn-warning boutonVM' onclick="\&quot;confirmStopVM('$vmName')\&quot;">Éteindre</button>";
-                        echo "<button class='btn btn-danger boutonVM' onclick="\&quot;confirmDeleteVM('$vmName')\&quot;">Supprimer</button>";
-                        echo "";
+                        echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
+                        echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
+                        echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
+                        echo "</li>";
                     }
                     ?>
         </ul>
@@ -188,29 +188,29 @@
                     // For debug
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
-
+    
                     // Chemin vers le fichier de conf temporaire, à l'avenir cela sera changé
                     $cheminFichier = 'cours.conf';
-
+    
                     // Lire les lignes du fichier et les stocker dans un tableau
                     $lignes = file($cheminFichier);
-
+    
                     // Fonction servant juste pour la suite pour l'affichage de la barre dans les VM à créer
                     $taille = 0;
                     foreach ($lignes as $ligne) {
-                        $VMname = substr($ligne, 0, -1) . "-" . $_SERVER['REMOTE_USER'] . "-1";
-                        if (existingVM($VMname) == false) {
+                        $VMname = trim($ligne) . "-" . $_SERVER['REMOTE_USER'] . "-1";
+                        if (!existingVM($VMname)) {
                             $taille = $taille + 1;
                         }
                     }
-
+    
                     foreach ($lignes as $ligne) {
                         // On vérifie si la VM n'existe pas déjà
-                        $VMname = substr($ligne, 0, -1) . "-" . $_SERVER['REMOTE_USER'] . "-1";
-                        if (existingVM($VMname) == false) {
+                        $VMname = trim($ligne) . "-" . $_SERVER['REMOTE_USER'] . "-1";
+                        if (!existingVM($VMname)) {
                             echo "<li class='list-group-item'>$ligne";
-                            echo "<button class='btn btn-success boutonVM' onclick="\&quot;confirmCreateVM('$VMname')\&quot;">Créer</button>";
-                            echo "";
+                            echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
+                            echo "</li>";
                             echo "<div class='separator'></div>";
                         }
                     }
