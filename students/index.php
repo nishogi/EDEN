@@ -108,8 +108,8 @@
         inputPlaceholder: 'Entrez votre clé ssh publique ici...',
         inputAttributes: {
             'aria-label': 'Entrez votre clé ssh publique ici',
-            'padding': '10px'
         },
+        padding: '1rem',
         showCancelButton: true
     }).then((result) => {
         if (result.isConfirmed && result.value) {
