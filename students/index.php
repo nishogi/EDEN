@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDEN - Mes VMs</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Core theme CSS (includes Bootstrap) -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../css/styles.css" rel="stylesheet" />
-    <script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDEN - Mes VMs</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/styles.css" rel="stylesheet">
+  <script>
         function confirmStartVM(name) {
             var confirmation = confirm("Souhaitez-vous vraiment allumer la VM : " + name + " ?");
             if (confirmation) {
@@ -85,8 +82,8 @@
                 xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
             }
         }
-    </script>
-    <style>
+  </script>
+  <style>
         body {
             font-family: Arial, sans-serif;
         }
@@ -117,70 +114,48 @@
             background-color: transparent;
             border: none;
         }
-    </style>
+  </style>
 </head>
-
 <body>
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-        <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light text-center">
-                <?php
+  <div class="d-flex" id="wrapper">
+    <div class="border-end bg-white" id="sidebar-wrapper">
+      <div class="sidebar-heading border-bottom bg-light text-center">
+        <?php
                 echo ($_SERVER['REMOTE_USER'] ?? '') . PHP_EOL;
                 ?>
-            </div>
-            <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Documentation</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="../index.php">Home</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/teachers/index.php">Teachers pages</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/students/index.php">Students pages</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/index.php">Admin pages</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/fbertin/index.php">Perso fbertin (tests CAS)</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">
-                    <div class="text-center"><b>2024</b></div>
-                </a>
-            </div>
+      </div>
+      <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Documentation</a> <a class="list-group-item list-group-item-action list-group-item-light p-3" href="../index.php">Home</a> <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/teachers/index.php">Teachers pages</a> <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/students/index.php">Students pages</a> <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/index.php">Admin pages</a> <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/fbertin/index.php">Perso fbertin (tests CAS)</a> <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">
+        <div class="text-center">
+          <b>2024</b>
+        </div></a>
+      </div>
+    </div>
+    <div id="page-content-wrapper">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+          <button class="btn btn-primary" id="sidebarToggle">&lt;&lt; Menu &gt;&gt;</button>
+          <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="https://github.com/Nishogi/EDEN" target="_blank">lien vers le code source</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="mailto:franz.bertin@imtbs-tsp.eu">franz.bertin@imtbs-tsp.eu</a> <a class="dropdown-item" href="mailto:christophe.gaboret@imtbs-tsp.eu">christophe.gaboret@imtbs-tsp.eu</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item" href="mailto:tom.burellier@telecom-sudparis.eu">tom.burellier@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:nicolas.rocq@telecom-sudparis.eu">nicolas.rocq@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:mathis.williot@telecom-sudparis.eu">mathis.williot@telecom-sudparis.eu</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item" href="mailto:olivier.berger@telecom-sudparis.eu">olivier.berger@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:arthur.jovart@telecom-sudparis.eu">arthur.jovart@telecom-sudparis.eu</a>
+              </div>
+            </li>
+          </ul>
         </div>
-        <!-- Page content wrapper -->
-        <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <div class="container-fluid">
-                    <button class="btn btn-primary" id="sidebarToggle">&lt;&lt; Menu &gt;&gt;</button>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="https://github.com/Nishogi/EDEN" target="_blank">lien vers le code source</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">Team</a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="mailto:franz.bertin@imtbs-tsp.eu">franz.bertin@imtbs-tsp.eu</a>
-                                <a class="dropdown-item" href="mailto:christophe.gaboret@imtbs-tsp.eu">christophe.gaboret@imtbs-tsp.eu</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="mailto:tom.burellier@telecom-sudparis.eu">tom.burellier@telecom-sudparis.eu</a>
-                                <a class="dropdown-item" href="mailto:nicolas.rocq@telecom-sudparis.eu">nicolas.rocq@telecom-sudparis.eu</a>
-                                <a class="dropdown-item" href="mailto:mathis.williot@telecom-sudparis.eu">mathis.williot@telecom-sudparis.eu</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="mailto:olivier.berger@telecom-sudparis.eu">olivier.berger@telecom-sudparis.eu</a>
-                                <a class="dropdown-item" href="mailto:arthur.jovart@telecom-sudparis.eu">arthur.jovart@telecom-sudparis.eu</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-                
-            <!-- Page content -->
-            <div class="container-fluid">
-                <h1 class="mt-4">Bienvenue sur la page de gestion de vos VM, <?php echo $_SERVER['REMOTE_USER']; ?></h1>
-                <hr class="my-4">
-
-                <p><b>Mes VM :</b></p>
-                <ul class="list-group">
-                    <?php
+      </nav>
+      <div class="container-fluid">
+        <h1 class="mt-4">Bienvenue sur la page de gestion de vos VM, <?php echo $_SERVER['REMOTE_USER']; ?></h1>
+        <hr class="my-4">
+        <p><b>Mes VM :</b></p>
+        <ul class="list-group">
+          <?php
                     // For debug
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
@@ -199,19 +174,17 @@
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
                         echo "<button class='btn btn-primary boutonVM'>Accéder</button>";
-                        echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
-                        echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
-                        echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
-                        echo "</li>";
+                        echo "<button class='btn btn-success boutonVM' onclick="\&quot;confirmStartVM('$vmName')\&quot;">Allumer</button>";
+                        echo "<button class='btn btn-warning boutonVM' onclick="\&quot;confirmStopVM('$vmName')\&quot;">Éteindre</button>";
+                        echo "<button class='btn btn-danger boutonVM' onclick="\&quot;confirmDeleteVM('$vmName')\&quot;">Supprimer</button>";
+                        echo "";
                     }
                     ?>
-                </ul>
-
-                <hr class="my-4">
-
-                <p><b>VM disponibles :</b></p>
-                <ul class="list-group">
-                    <?php
+        </ul>
+        <hr class="my-4">
+        <p><b>VM disponibles :</b></p>
+        <ul class="list-group">
+          <?php
                     // For debug
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
@@ -236,22 +209,18 @@
                         $VMname = substr($ligne, 0, -1) . "-" . $_SERVER['REMOTE_USER'] . "-1";
                         if (existingVM($VMname) == false) {
                             echo "<li class='list-group-item'>$ligne";
-                            echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
-                            echo "</li>";
+                            echo "<button class='btn btn-success boutonVM' onclick="\&quot;confirmCreateVM('$VMname')\&quot;">Créer</button>";
+                            echo "";
                             echo "<div class='separator'></div>";
                         }
                     }
                     ?>
-                </ul>
-
-                <hr class="my-4">
-
-            </div>
-        </div>
+        </ul>
+        <hr class="my-4">
+      </div>
     </div>
-    <!-- Bootstrap core JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS -->
-    <script src="../js/scripts.js"></script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
+  <script src="../js/scripts.js"></script>
 </body>
 </html>
