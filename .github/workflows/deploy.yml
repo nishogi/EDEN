@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy EDEN
-        if: ${{ contains(github.event.head_commit.message, 'website') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'website/')))) }}
+        if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.message, 'website') || contains(join(github.event.commits.*.modified, ''), 'website/')) }}
         env:
           TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
         run: |
@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy Proxy
-        if: ${{ contains(github.event.head_commit.message, 'proxy') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'proxy/')))) }}
+        if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.message, 'proxy') || contains(join(github.event.commits.*.modified, ''), 'proxy/')) }}
         env:
           TARGET_PATH: /opt/EDEN/proxy
         run: |
@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy Tofu
-        if: ${{ contains(github.event.head_commit.message, 'tofu') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'tofu/')))) }}
+        if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.message, 'tofu') || contains(join(github.event.commits.*.modified, ''), 'tofu/')) }}
         env:
           TARGET_PATH: /var/www/tofu
         run: |
@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy DNS
-        if: ${{ contains(github.event.head_commit.message, 'dns') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'dns/')))) }}
+        if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.message, 'dns') || contains(join(github.event.commits.*.modified, ''), 'dns/')) }}
         env:
           TARGET_PATH: /opt/EDEN/dns
         run: |
