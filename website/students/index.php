@@ -56,7 +56,6 @@
                                 }
                             }
                         }
-                    };
                     xhrStatus.send();
                 }, 2000); // Check status every 2 seconds
             }
@@ -109,7 +108,6 @@
                                 }
                             }
                         }
-                    };
                     xhrStatus.send();
                 }, 2000); // Check status every 2 seconds
             }
@@ -126,6 +124,7 @@
                 'aria-label': 'Entrez votre clé ssh publique ici',
             },
             showCancelButton: true,
+            padding: '1rem'
             inputStyle: {
                 padding: '1rem'
             }
