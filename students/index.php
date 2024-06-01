@@ -16,7 +16,7 @@
                 text: "Souhaitez-vous vraiment allumer la VM : " + name + " ?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Oui, allumer!',
+                confirmButtonText: 'Oui',
                 cancelButtonText: 'Non, annuler'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -46,7 +46,7 @@
                 text: "Souhaitez-vous vraiment arrêter la VM : " + name + " ?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Oui, arrêter!',
+                confirmButtonText: 'Oui',
                 cancelButtonText: 'Non, annuler'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -76,7 +76,7 @@
                 text: "Souhaitez-vous vraiment supprimer la VM : " + name + " ?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Oui, supprimer!',
+                confirmButtonText: 'Oui',
                 cancelButtonText: 'Non, annuler'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -108,6 +108,7 @@
                 inputPlaceholder: 'Entrez votre clé ssh publique ici...',
                 inputAttributes: {
                     'aria-label': 'Entrez votre clé ssh publique ici'
+                    'padding': '10px'
                 },
                 showCancelButton: true
             }).then((result) => {
