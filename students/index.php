@@ -194,8 +194,8 @@
                         echo "<p>Statut : $status</p>";
                         echo "<button class='btn btn-primary boutonVM'>Accéder</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
-                        echo "<button class='btn btn-danger boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
-                        echo "<button class='btn btn-warning boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
+                        echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
+                        echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
                         echo "</li>";
                     }
                     ?>
@@ -203,7 +203,7 @@
 
                 <hr class="my-4">
 
-                <p><b>Mes VM possibles à créer :</b></p>
+                <p><b>VM disponibles :</b></p>
                 <ul class="list-group">
                     <?php
                     // For debug
@@ -239,17 +239,6 @@
 
                 <hr class="my-4">
 
-                <p><b>A implementer</b></p>
-                <ul>
-                    <li>Créer sa VM pour un module particulier</li>
-                </ul>
-
-                <p>1 module = 1 cours</p>
-                <p>Identification VM => IdDuCours_UidStudent_1</p>
-                <p>1 étudiant ne peut créer qu'une VM par module</p>
-                <p>Durée de vie limitée des VM</p>
-
-                <div id="debugInfo"></div>
             </div>
         </div>
     </div>
