@@ -55,8 +55,9 @@
                     <button class="btn btn-primary" id="sidebarToggle">Menu</button>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                        <li class="nav-item active"><a class="nav-link" href="https://gitlabev.imtbs-tsp.eu" target="_blank">GitLabEv</a></li>
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
+                        <li class="nav-item active"><a class="nav-link" href="https://github.com/Nishogi/EDEN" target="_blank">code source</a></li>
+                        <liv class="nav-item active">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="#!">franz.bertin@imtbs-tsp.eu</b></a>
                                 <a class="dropdown-item" href="#!">christophe.gaboret@imtbs-tsp.eu</b></a>
@@ -69,6 +70,7 @@
                                 <a class="dropdown-item" href="#!">arthur.jovart@telecom-sudparis.eu</a>
                                 <a class="dropdown-item" href="#!"></a>
                             </div>
+                        </li>
                         <li class="nav-item dropdown">
                         </li>
                     </ul>
