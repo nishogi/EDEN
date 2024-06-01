@@ -98,50 +98,6 @@
         });
     }
 
-    function confirmDeleteVM(name) {
-        Swal.fire({
-            title: 'Confirmation',
-            text: "Souhaitez-vous vraiment supprimer la VM : " + name + " ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non, annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Envoi d'une requête AJAX pour supprimer la VM
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "ajax_functions.php?action=deleteVM&name=" + encodeURIComponent(name), true);
-                xhr.send();
-
-                Swal.fire({
-                    title: 'Veuillez patienter',
-                    text: 'La VM est en cours de suppression...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                // Poll the VM status until it is confirmed to be deleted
-                var checkStatus = setInterval(function () {
-                    var xhrStatus = new XMLHttpRequest();
-                    xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(name), true);
-                    xhrStatus.onreadystatechange = function() {
-                        if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
-                            var response = JSON.parse(xhrStatus.responseText);
-                            if (response.status === 'notfound') {
-                                clearInterval(checkStatus);
-                                Swal.close();
-                                location.reload();
-                            }
-                        }
-                    };
-                    xhrStatus.send();
-                }, 2000); // Check status every 2 seconds
-            }
-        });
-    }
-        
     function confirmCreateVM(vmName) {
         Swal.fire({
             title: 'Clé SSH',
@@ -150,8 +106,8 @@
             inputPlaceholder: 'Entrez votre clé ssh publique ici...',
             inputAttributes: {
                 'aria-label': 'Entrez votre clé ssh publique ici',
-                'style': 'padding: 10px;'
             },
+            padding : '1rem',
             showCancelButton: true
         }).then((result) => {
             if (result.isConfirmed && result.value) {
