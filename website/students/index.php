@@ -102,12 +102,12 @@
         Swal.fire({
             title: 'Clé SSH',
             input: 'textarea',
+            padding: "20px",
             inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
             inputPlaceholder: 'Entrez votre clé ssh publique ici...',
             inputAttributes: {
                 'aria-label': 'Entrez votre clé ssh publique ici',
             },
-            padding : '1rem',
             showCancelButton: true
         }).then((result) => {
             if (result.isConfirmed && result.value) {
