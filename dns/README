@@ -1,0 +1,5 @@
+script.sh permet d'ajouter/supprimer des entrees dns du serveur 157.159.11.3.
+
+-> ./script.sh [add/delete] nom ip
+
+l'entree sera sous la forme nom.atlantis.int-evry.fr 

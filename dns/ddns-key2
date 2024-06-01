@@ -1,0 +1,4 @@
+key "ddns-key2" {
+        algorithm hmac-sha256;
+        secret "DDUhy9nVvcla3+0YA/N16QoJ/TU1RIwK4PygfOKOhwo=";
+};

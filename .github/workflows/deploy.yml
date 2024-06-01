@@ -1,4 +1,4 @@
-name: Deploy PHP Application
+name: Deployment 
 
 on:
   push:
@@ -6,17 +6,67 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy-eden:
+    if: contains(github.event.head_commit.message, 'website')
     runs-on: self-hosted
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-    - name: Deploy Application
-      env:
-        TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
-      run: |
-        rm -rf $TARGET_PATH.bak
-        cp -R $TARGET_PATH $TARGET_PATH.bak
-        find . -path ./.git -prune -o -path ./.github -prune -o -exec cp -R --parents {} $TARGET_PATH \;
+      - name: Deploy EDEN
+        env:
+          TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
+        run: |
+          rm -rf $TARGET_PATH.bak
+          cp -R $TARGET_PATH $TARGET_PATH.bak
+          cp -R ./website $TARGET_PATH
+
+  copy-proxy-config:
+    if: contains(github.event.head_commit.message, 'proxy')
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Deploy Proxy
+        env:
+          TARGET_PATH: /opt/EDEN/proxy
+        run: |
+          rm -rf $TARGET_PATH.bak
+          cp -R $TARGET_PATH $TARGET_PATH.bak
+          cp -R ./proxy $TARGET_PATH
+
+
+  copy-tofu-config:
+    if: contains(github.event.head_commit.message, 'tofu')
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Deploy Tofu
+        env:
+          TARGET_PATH: /var/www/tofu
+        run: |
+          rm -rf $TARGET_PATH.bak
+          cp -R $TARGET_PATH $TARGET_PATH.bak
+          cp -R ./tofu $TARGET_PATH
+
+  copy-dns-config:
+    if: contains(github.event.head_commit.message, 'dns')
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Deploy DNS
+        env:
+          TARGET_PATH: /opt/EDEN/dns
+        run: |
+          rm -rf $TARGET_PATH.bak
+          cp -R $TARGET_PATH $TARGET_PATH.bak
+          cp -R ./dns $TARGET_PATH
