@@ -54,100 +54,128 @@
         });
     }
 
-        function confirmStopVM(name) {
-            Swal.fire({
-                title: 'Confirmation',
-                text: "Souhaitez-vous vraiment arrêter la VM : " + name + " ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Oui',
-                cancelButtonText: 'Non, annuler'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Envoi d'une requête AJAX pour arrêter la VM
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", "ajax_functions.php?action=stopVM&name=" + encodeURIComponent(name), true);
-                    xhr.send();
+    function confirmStopVM(name) {
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Souhaitez-vous vraiment arrêter la VM : " + name + " ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non, annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Envoi d'une requête AJAX pour arrêter la VM
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "ajax_functions.php?action=stopVM&name=" + encodeURIComponent(name), true);
+                xhr.send();
 
-                    Swal.fire({
-                        title: 'Veuillez patienter',
-                        text: 'La VM est en cours d\'arrêt...',
-                        timer: 2000,
-                        onBeforeOpen: () => {
-                            Swal.showLoading()
-                        },
-                        onClose: () => {
-                            location.reload();
+                Swal.fire({
+                    title: 'Veuillez patienter',
+                    text: 'La VM est en cours d\'arrêt...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Poll the VM status until it is confirmed to be stopped
+                var checkStatus = setInterval(function () {
+                    var xhrStatus = new XMLHttpRequest();
+                    xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(name), true);
+                    xhrStatus.onreadystatechange = function() {
+                        if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
+                            var response = JSON.parse(xhrStatus.responseText);
+                            if (response.status === 'stopped') {
+                                clearInterval(checkStatus);
+                                Swal.close();
+                                location.reload();
+                            }
                         }
-                    });
-                }
-            });
-        }
+                    };
+                    xhrStatus.send();
+                }, 2000); // Check status every 2 seconds
+            }
+        });
+    }
 
-        function confirmDeleteVM(name) {
-            Swal.fire({
-                title: 'Confirmation',
-                text: "Souhaitez-vous vraiment supprimer la VM : " + name + " ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Oui',
-                cancelButtonText: 'Non, annuler'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Envoi d'une requête AJAX pour supprimer la VM
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", "students_functions.php?action=deleteVM&name=" + encodeURIComponent(name), true);
-                    xhr.send();
+    function confirmDeleteVM(name) {
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Souhaitez-vous vraiment supprimer la VM : " + name + " ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non, annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Envoi d'une requête AJAX pour supprimer la VM
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "ajax_functions.php?action=deleteVM&name=" + encodeURIComponent(name), true);
+                xhr.send();
 
-                    Swal.fire({
-                        title: 'Veuillez patienter',
-                        text: 'La VM est en cours de suppression...',
-                        timer: 2000,
-                        onBeforeOpen: () => {
-                            Swal.showLoading()
-                        },
-                        onClose: () => {
-                            location.reload();
+                Swal.fire({
+                    title: 'Veuillez patienter',
+                    text: 'La VM est en cours de suppression...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Poll the VM status until it is confirmed to be deleted
+                var checkStatus = setInterval(function () {
+                    var xhrStatus = new XMLHttpRequest();
+                    xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(name), true);
+                    xhrStatus.onreadystatechange = function() {
+                        if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
+                            var response = JSON.parse(xhrStatus.responseText);
+                            if (response.status === 'notfound') {
+                                clearInterval(checkStatus);
+                                Swal.close();
+                                location.reload();
+                            }
                         }
-                    });
-                }
-            });
-        }
+                    };
+                    xhrStatus.send();
+                }, 2000); // Check status every 2 seconds
+            }
+        });
+    }
         
-        function confirmCreateVM(vmName) {
-    Swal.fire({
-        title: 'Clé SSH',
-        input: 'textarea',
-        inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
-        inputPlaceholder: 'Entrez votre clé ssh publique ici...',
-        inputAttributes: {
-            'aria-label': 'Entrez votre clé ssh publique ici',
-        },
-        padding: '1rem',
-        showCancelButton: true
-    }).then((result) => {
-        if (result.isConfirmed && result.value) {
-            var sshPublicKey = result.value;
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "ajax_functions.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    Swal.fire({
-                        title: 'Succès!',
-                        text: 'VM créée avec succès!',
-                        icon: 'success',
-                        timer: 2000,
-                        onClose: () => {
-                            document.getElementById('debugInfo').innerText = this.responseText;
-                            location.reload();
-                        }
-                    });
-                }
-            };
-            xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
-        }
-    });
+    function confirmCreateVM(vmName) {
+        Swal.fire({
+            title: 'Clé SSH',
+            input: 'textarea',
+            inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
+            inputPlaceholder: 'Entrez votre clé ssh publique ici...',
+            inputAttributes: {
+                'aria-label': 'Entrez votre clé ssh publique ici',
+                'style': 'padding: 10px;'
+            },
+            showCancelButton: true
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                var sshPublicKey = result.value;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "ajax_functions.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        Swal.fire({
+                            title: 'Succès!',
+                            text: 'VM créée avec succès!',
+                            icon: 'success',
+                            timer: 2000,
+                            onClose: () => {
+                                document.getElementById('debugInfo').innerText = this.responseText;
+                                location.reload();
+                            }
+                        });
+                    }
+                };
+                xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
+            }
+        });
 }
   </script>
   <style>
