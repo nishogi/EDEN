@@ -106,7 +106,7 @@
 
         li {
             padding: 0.5rem;
-            margin: 0 0.5rem 0.5rem 0.5rem;
+            margin: 0 0.5rem 0.8rem 0.5rem;
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 0.5rem;
