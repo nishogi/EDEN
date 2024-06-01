@@ -46,16 +46,15 @@
                                 Swal.close();
                                 Swal.fire({
                                     title: 'Succès!',
-                                    text: 'VM démarée !',
+                                    text: 'VM démarrée !',
                                     icon: 'success',
-                                    timer: 2000,
-                                    onClose: () => {
-                                        location.reload();
-                                        }
-                                    });
-                                }
+                                    timer: 2000
+                                }).then(() => {
+                                    location.reload();
+                                });
                             }
                         }
+                    }
                     xhrStatus.send();
                 }, 2000); // Check status every 2 seconds
             }
@@ -98,16 +97,15 @@
                                 Swal.close();
                                 Swal.fire({
                                     title: 'Succès!',
-                                    text: 'VM stopée !',
+                                    text: 'VM arrêtée !',
                                     icon: 'success',
-                                    timer: 2000,
-                                    onClose: () => {
-                                        location.reload();
-                                        }
-                                    });
-                                }
+                                    timer: 2000
+                                }).then(() => {
+                                    location.reload();
+                                });
                             }
                         }
+                    }
                     xhrStatus.send();
                 }, 2000); // Check status every 2 seconds
             }
@@ -122,13 +120,11 @@
             inputPlaceholder: 'Entrez votre clé ssh publique ici...',
             inputAttributes: {
                 'aria-label': 'Entrez votre clé ssh publique ici',
+                style: 'padding: 1rem;'
             },
             showCancelButton: true,
             padding: '1rem'
-            inputStyle: {
-                padding: '1rem'
-            }
-        });.then((result) => {
+        }).then((result) => {
             if (result.isConfirmed && result.value) {
                 var sshPublicKey = result.value;
                 var xhr = new XMLHttpRequest();
@@ -159,10 +155,9 @@
                                             title: 'Succès!',
                                             text: 'VM créée avec succès et elle est en cours d\'exécution!',
                                             icon: 'success',
-                                            timer: 2000,
-                                            onClose: () => {
-                                                location.reload();
-                                            }
+                                            timer: 2000
+                                        }).then(() => {
+                                            location.reload();
                                         });
                                     }
                                 }
@@ -175,7 +170,7 @@
             }
         });
     }
-  </script>
+</script>
   <style>
         body {
             font-family: Arial, sans-serif;
