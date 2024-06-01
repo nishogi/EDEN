@@ -6,21 +6,6 @@ on:
       - main
 
 jobs:
-  deploy-eden:
-    runs-on: self-hosted
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Deploy EDEN
-        if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.message, 'website') || contains(join(github.event.commits.*.modified, ''), 'website/')) }}
-        env:
-          TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
-        run: |
-          rm -rf $TARGET_PATH.bak
-          cp -R $TARGET_PATH $TARGET_PATH.bak
-          cp -R ./website $TARGET_PATH
-
   copy-proxy-config:
     runs-on: self-hosted
     steps:
@@ -65,3 +50,19 @@ jobs:
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
           cp -R ./dns $TARGET_PATH
+
+  deploy-eden:
+    runs-on: self-hosted
+    needs: [copy-proxy-config, copy-tofu-config, copy-dns-config]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Deploy EDEN
+        if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.message, 'website') || contains(join(github.event.commits.*.modified, ''), 'website/')) }}
+        env:
+          TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
+        run: |
+          rm -rf $TARGET_PATH.bak
+          cp -R $TARGET_PATH $TARGET_PATH.bak
+          cp -R ./website $TARGET_PATH
