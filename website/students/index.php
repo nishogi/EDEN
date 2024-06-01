@@ -10,49 +10,29 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-        function confirmStartVM(name) {
-            Swal.fire({
-                title: 'Confirmation',
-                text: "Souhaitez-vous vraiment allumer la VM : " + name + " ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Oui',
-                cancelButtonText: 'Non, annuler'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Envoi d'une requête AJAX pour démarrer la VM
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", "ajax_functions.php?action=startVM&name=" + encodeURIComponent(name), true);
-                    xhr.send();
+    function confirmStartVM(name) {
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Souhaitez-vous vraiment allumer la VM : " + name + " ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non, annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Envoi d'une requête AJAX pour démarrer la VM
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "ajax_functions.php?action=startVM&name=" + encodeURIComponent(name), true);
+                xhr.send();
 
-                    Swal.fire({
-                        title: 'Veuillez patienter',
-                        text: 'La VM est en cours de démarrage...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-
-                    // Poll the VM status until it is confirmed to be running
-                    var checkStatus = setInterval(function () {
-                        var xhrStatus = new XMLHttpRequest();
-                        xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(name), true);
-                        xhrStatus.onreadystatechange = function() {
-                            if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
-                                var response = JSON.parse(xhrStatus.responseText);
-                                if (response.status === 'running') {
-                                    clearInterval(checkStatus);
-                                    Swal.close();
-                                    location.reload();
-                                }
-                            }
-                        };
-                        xhrStatus.send();
-                    }, 2000); // Check status every 2 seconds
-                }
-            });
-        }
+                Swal.fire({
+                    title: 'Veuillez patienter',
+                    text: 'La VM est en cours de démarrage...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
                 // Poll the VM status until it is confirmed to be running
                 var checkStatus = setInterval(function () {
