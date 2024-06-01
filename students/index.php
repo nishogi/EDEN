@@ -1,11 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 
 <head>
-    <title>Eden students page</title>
-    <!-- Favicon-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eden Students Page</title>
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-
-    <!-- Core theme CSS (includes Bootstrap)-->
+    <!-- Core theme CSS (includes Bootstrap) -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../css/styles.css" rel="stylesheet" />
     <script>
         function confirmStartVM(name) {
@@ -70,7 +73,6 @@
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function() {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-
                         // Il faudra modifier ici pour par la suite envoyer les identifiants de connexion à la VM 
                         // et d'ailleurs les afficher autre part pour les avoir à chaque fois 
                         // par exemple en dessous de statut avoir ssh login
@@ -78,111 +80,113 @@
                         alert("Réponse du serveur : " + this.responseText); // Affiche la réponse dans une alerte
                         document.getElementById('debugInfo').innerText = this.responseText; // Ou l'affiche dans le DOM
                         location.reload();
-                        location.reload();
                     }
                 };
                 xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
             }
         }
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar-heading {
+            font-weight: bold;
+        }
+
+        .btn {
+            margin: 0.2rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+        }
+
+        .separator {
+            height: 2px;
+            width: 50%;
+            border-width: 0;
+            color: blue;
+            background-color: blue;
+            margin: 1rem auto;
+        }
+    </style>
 </head>
 
 <body>
-
     <div class="d-flex" id="wrapper">
-
-        <!-- Sidebar-->
+        <!-- Sidebar -->
         <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light" align="center">
+            <div class="sidebar-heading border-bottom bg-light text-center">
                 <?php
                 echo ($_SERVER['REMOTE_USER'] ?? '') . PHP_EOL;
                 ?>
-                &nbsp;
             </div>
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Documentation</a>
-
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="../index.php">Home</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="/teachers/index.php">Teachers pages</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="/students/index.php">Students pages</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="/admin/index.php">Admin pages</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="/fbertin/index.php">Perso fbertin (tests CAS)</a>
-
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/teachers/index.php">Teachers pages</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/students/index.php">Students pages</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/index.php">Admin pages</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/fbertin/index.php">Perso fbertin (tests CAS)</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">
-                    <table width="100%">
-                        <tr>
-                            <td width="100%" align="center"><b>2024</b></td>
-                        </tr>
-                    </table>
+                    <div class="text-center"><b>2024</b></div>
                 </a>
             </div>
         </div>
-
-        <!--  Page content wrapper - Top navigation -->
+        <!-- Page content wrapper -->
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                 <div class="container-fluid">
-                    <button class="btn btn-primary" id="sidebarToggle">
-                        << Menu>>
+                    <button class="btn btn-primary" id="sidebarToggle">&lt;&lt; Menu &gt;&gt;</button>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation"><span
-                            class="navbar-toggler-icon"></span></button>
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                        <li class="nav-item active"><a class="nav-link" href="https://gitlabev.imtbs-tsp.eu"
-                                target="_blank">GitLabEv</a></li>
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#!">franz.bertin@imtbs-tsp.eu</b></a>
-                            <a class="dropdown-item" href="#!">christophe.gaboret@imtbs-tsp.eu</b></a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#!">tom.burellier@telecom-sudparis.eu</a>
-                            <a class="dropdown-item" href="#!">nicolas.rocq@telecom-sudparis.eu</a>
-                            <a class="dropdown-item" href="#!">mathis.williot@telecom-sudparis.eu</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#!">olivier.berger@telecom-sudparis.eu</a>
-                            <a class="dropdown-item" href="#!">arthur.jovart@telecom-sudparis.eu</a>
-                            <a class="dropdown-item" href="#!"></a>
-                        </div>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="https://gitlabev.imtbs-tsp.eu" target="_blank">GitLabEv</a>
+                        </li>
                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Team</a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="mailto:franz.bertin@imtbs-tsp.eu">franz.bertin@imtbs-tsp.eu</a>
+                                <a class="dropdown-item" href="mailto:christophe.gaboret@imtbs-tsp.eu">christophe.gaboret@imtbs-tsp.eu</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="mailto:tom.burellier@telecom-sudparis.eu">tom.burellier@telecom-sudparis.eu</a>
+                                <a class="dropdown-item" href="mailto:nicolas.rocq@telecom-sudparis.eu">nicolas.rocq@telecom-sudparis.eu</a>
+                                <a class="dropdown-item" href="mailto:mathis.williot@telecom-sudparis.eu">mathis.williot@telecom-sudparis.eu</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="mailto:olivier.berger@telecom-sudparis.eu">olivier.berger@telecom-sudparis.eu</a>
+                                <a class="dropdown-item" href="mailto:arthur.jovart@telecom-sudparis.eu">arthur.jovart@telecom-sudparis.eu</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </nav>
-
-
-            <!-- Page content-->
+                
+            <!-- Page content -->
             <div class="container-fluid">
-                <p>&nbsp;</p>
-                <table width="100%" border="0">
-                    <tr>
-                        <h1>Eden students page:
-                            <?php echo $_SERVER['REMOTE_USER']; ?>
-                        </h1>
-                    </tr>
-                </table>
-
-                <div align="center">
-                    <hr style="height:5px; width:100%; border-width:0; color:blue; background-color:blue" />
-                </div>
-
+                <h1 class="mt-4">Eden Students Page: <?php echo $_SERVER['REMOTE_USER']; ?></h1>
+                <hr class="my-4">
 
                 <p><b>Mes VM :</b></p>
-                <ul>
+                <ul class="list-group">
                     <?php
-
-
                     // For debug
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
-
-
 
                     include 'students_functions.php';
 
@@ -191,35 +195,26 @@
 
                     $userVMs = getVMNames($vmNamePattern);
 
-                    echo "<ul>";
-                    $ind = 0;
                     foreach ($userVMs as $vmName) {
                         $VMId = getVMId($vmName);
                         $status = checkVMStatus($VMId);
-                        echo "<li><b>$vmName</b>";
+                        echo "<li class='list-group-item'>";
+                        echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo '<button class="btn btn-primary boutonVM">Accéder</button>';
+                        echo "<button class='btn btn-primary boutonVM'>Accéder</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
-                        echo "<button class='btn btn-danger boutonVM' onclick=\"confirmStopVM('$vmName')\">Eteindre</button>";
+                        echo "<button class='btn btn-danger boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
                         echo "</li>";
-                        $ind = $ind + 1;
-                        if ($ind != count($userVMs)) {
-                            echo '<div align="left">
-                                <hr style="height:2px; width:50%; border-width:0; color:blue; background-color:blue" />
-                                </div>';
-                        }
+                        echo '<div class="separator"></div>';
                     }
-                    echo "</ul>";
                     ?>
                 </ul>
 
-                <div align="center">
-                    <hr style="height:5px; width:100%; border-width:0; color:blue; background-color:blue" />
-                </div>
+                <hr class="my-4">
 
                 <p><b>Mes VM possibles à créer :</b></p>
-                <ul>
+                <ul class="list-group">
                     <?php
                     // For debug
                     error_reporting(E_ALL);
@@ -240,54 +235,38 @@
                         }
                     }
 
-                    echo "<ul>";
-                    $ind = 0;
                     foreach ($lignes as $ligne) {
                         // On vérifie si la VM n'existe pas déjà
                         $VMname = substr($ligne, 0, -1) . "-" . $_SERVER['REMOTE_USER'] . "-1";
                         if (existingVM($VMname) == false) {
-                            echo "<li>$ligne";
-                            echo "<button class='boutonVM' onclick=\"confirmCreateVM('$vmName')\">Créer</button>";
-                            echo "<br></br>";
+                            echo "<li class='list-group-item'>$ligne";
+                            echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
                             echo "</li>";
-                            $ind = $ind + 1;
-                            if ($ind != $taille) {
-                                echo '<div align="left">
-                                    <hr style="height:2px; width:50%; border-width:0; color:blue; background-color:blue" />
-                                    </div>';
-                            }
+                            echo '<div class="separator"></div>';
                         }
                     }
-                    echo "</ul>";
                     ?>
                 </ul>
 
-                <div align="center">
-                    <hr style="height:5px; width:100%; border-width:0; color:blue; background-color:blue" />
-                </div>
+                <hr class="my-4">
 
                 <p><b>A implementer</b></p>
                 <ul>
-                    <li>Creer sa VM pour un module particulier</li>
+                    <li>Créer sa VM pour un module particulier</li>
                 </ul>
 
                 <p>1 module = 1 cours</p>
-
                 <p>Identification VM => IdDuCours_UidStudent_1</p>
+                <p>1 étudiant ne peut créer qu'une VM par module</p>
+                <p>Durée de vie limitée des VM</p>
 
-                <p>1 etudiant ne peut que creer 1 VM par module</p>
-
-                <p>Duree de vie limitee des VM</p>
-
+                <div id="debugInfo"></div>
             </div>
         </div>
-
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
-
+    </div>
+    <!-- Bootstrap core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS -->
+    <script src="../js/scripts.js"></script>
 </body>
-
 </html>
