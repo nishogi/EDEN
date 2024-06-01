@@ -99,42 +99,42 @@
                 }
             });
         }
-
+        
         function confirmCreateVM(vmName) {
-            Swal.fire({
-                title: 'Clé SSH',
-                input: 'textarea',
-                inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
-                inputPlaceholder: 'Entrez votre clé ssh publique ici...',
-                inputAttributes: {
-                    'aria-label': 'Entrez votre clé ssh publique ici'
-                    'padding': '10px'
-                },
-                showCancelButton: true
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    var sshPublicKey = result.value;
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "ajax_functions.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function() {
-                        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                            Swal.fire({
-                                title: 'Succès!',
-                                text: 'VM créée avec succès!',
-                                icon: 'success',
-                                timer: 2000,
-                                onClose: () => {
-                                    document.getElementById('debugInfo').innerText = this.responseText;
-                                    location.reload();
-                                }
-                            });
+    Swal.fire({
+        title: 'Clé SSH',
+        input: 'textarea',
+        inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
+        inputPlaceholder: 'Entrez votre clé ssh publique ici...',
+        inputAttributes: {
+            'aria-label': 'Entrez votre clé ssh publique ici',
+            'padding': '10px'
+        },
+        showCancelButton: true
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            var sshPublicKey = result.value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "ajax_functions.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    Swal.fire({
+                        title: 'Succès!',
+                        text: 'VM créée avec succès!',
+                        icon: 'success',
+                        timer: 2000,
+                        onClose: () => {
+                            document.getElementById('debugInfo').innerText = this.responseText;
+                            location.reload();
                         }
-                    };
-                    xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
+                    });
                 }
-            });
+            };
+            xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
         }
+    });
+}
   </script>
   <style>
         body {
@@ -193,12 +193,18 @@
               <a class="nav-link" href="https://github.com/Nishogi/EDEN" target="_blank">lien vers le code source</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="mailto:franz.bertin@imtbs-tsp.eu">franz.bertin@imtbs-tsp.eu</a> <a class="dropdown-item" href="mailto:christophe.gaboret@imtbs-tsp.eu">christophe.gaboret@imtbs-tsp.eu</a>
-                <div class="dropdown-divider"></div><a class="dropdown-item" href="mailto:tom.burellier@telecom-sudparis.eu">tom.burellier@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:nicolas.rocq@telecom-sudparis.eu">nicolas.rocq@
-                <div class="dropdown-divider"></div><a class="dropdown-item" href="mailto:olivier.berger@telecom-sudparis.eu">olivier.berger@telecom-sudparis.eu</a> <a class="dropdown-item" href="mailto:arthur.jovart@telecom-sudparis.eu">arthur.jovart@telecom-sudparis.eu</a>
-              </div>
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="mailto:franz.bertin@imtbs-tsp.eu">franz.bertin@imtbs-tsp.eu</a>
+                <a class="dropdown-item" href="mailto:christophe.gaboret@imtbs-tsp.eu">christophe.gaboret@imtbs-tsp.eu</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="mailto:tom.burellier@telecom-sudparis.eu">tom.burellier@telecom-sudparis.eu</a>
+                <a class="dropdown-item" href="mailto:nicolas.rocq@telecom-sudparis.eu">nicolas.rocq@telecom-sudparis.eu</a>
+                <a class="dropdown-item" href="mailto:mathis.williot@telecom-sudparis.eu">mathis.williot@telecom-sudparis.eu</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="mailto:olivier.berger@telecom-sudparis.eu">olivier.berger@telecom-sudparis.eu</a>
+                <a class="dropdown-item" href="mailto:arthur.jovart@telecom-sudparis.eu">arthur.jovart@telecom-sudparis.eu</a>
+            </div>
             </li>
           </ul>
         </div>
