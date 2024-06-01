@@ -162,21 +162,44 @@
                 xhr.onreadystatechange = function() {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         Swal.fire({
-                            title: 'Succès!',
-                            text: 'VM créée avec succès!',
-                            icon: 'success',
-                            timer: 2000,
-                            onClose: () => {
-                                document.getElementById('debugInfo').innerText = this.responseText;
-                                location.reload();
+                            title: 'Veuillez patienter',
+                            text: 'La VM est en cours de création...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
                             }
                         });
+
+                        // Poll the VM status until it is confirmed to be running
+                        var checkStatus = setInterval(function () {
+                            var xhrStatus = new XMLHttpRequest();
+                            xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(vmName), true);
+                            xhrStatus.onreadystatechange = function() {
+                                if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
+                                    var response = JSON.parse(xhrStatus.responseText);
+                                    if (response.status === 'running') {
+                                        clearInterval(checkStatus);
+                                        Swal.close();
+                                        Swal.fire({
+                                            title: 'Succès!',
+                                            text: 'VM créée avec succès et elle est en cours d\'exécution!',
+                                            icon: 'success',
+                                            timer: 2000,
+                                            onClose: () => {
+                                                location.reload();
+                                            }
+                                        });
+                                    }
+                                }
+                            };
+                            xhrStatus.send();
+                        }, 2000); // Check status every 2 seconds
                     }
                 };
                 xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
             }
         });
-}
+    }
   </script>
   <style>
         body {
