@@ -237,8 +237,8 @@
                         if (existingVM($VMname) == false) {
                             echo "<li class='list-group-item'>$ligne";
                             echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
-                            echo "<div class='separator'></div>"
                             echo "</li>";
+                            echo "<div class='separator'></div>";
                         }
                     }
                     ?>
