@@ -198,10 +198,10 @@
                         $status = checkVMStatus($VMId);
                         echo "<li><b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo '<button class="boutonVM">Accéder</button>';
-                        echo "<button class='boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
-                        echo "<button class='boutonVM' onclick=\"confirmStopVM('$vmName')\">Eteindre</button>";
-                        echo "<button class='boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
+                        echo '<button class="btn btn-primary boutonVM">Accéder</button>';
+                        echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
+                        echo "<button class='btn btn-danger boutonVM' onclick=\"confirmStopVM('$vmName')\">Eteindre</button>";
+                        echo "<button class='btn btn-warning boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
                         echo "</li>";
                         $ind = $ind + 1;
                         if ($ind != count($userVMs)) {
