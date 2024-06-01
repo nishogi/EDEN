@@ -1,4 +1,4 @@
-name: Deployment 
+name: Deployment
 
 on:
   push:
@@ -7,14 +7,13 @@ on:
 
 jobs:
   deploy-eden:
-    if: contains(github.event.head_commit.message, 'website')
     runs-on: self-hosted
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Deploy EDEN
+        if: ${{ contains(github.event.head_commit.message, 'website') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'website/')))) }}
         env:
           TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
         run: |
@@ -23,14 +22,13 @@ jobs:
           cp -R ./website $TARGET_PATH
 
   copy-proxy-config:
-    if: contains(github.event.head_commit.message, 'proxy')
     runs-on: self-hosted
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Deploy Proxy
+        if: ${{ contains(github.event.head_commit.message, 'proxy') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'proxy/')))) }}
         env:
           TARGET_PATH: /opt/EDEN/proxy
         run: |
@@ -38,16 +36,14 @@ jobs:
           cp -R $TARGET_PATH $TARGET_PATH.bak
           cp -R ./proxy $TARGET_PATH
 
-
   copy-tofu-config:
-    if: contains(github.event.head_commit.message, 'tofu')
     runs-on: self-hosted
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Deploy Tofu
+        if: ${{ contains(github.event.head_commit.message, 'tofu') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'tofu/')))) }}
         env:
           TARGET_PATH: /var/www/tofu
         run: |
@@ -56,14 +52,13 @@ jobs:
           cp -R ./tofu $TARGET_PATH
 
   copy-dns-config:
-    if: contains(github.event.head_commit.message, 'dns')
     runs-on: self-hosted
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Deploy DNS
+        if: ${{ contains(github.event.head_commit.message, 'dns') || github.event_name == 'push' && (github.ref == 'refs/heads/main' && (github.event.commits | contains (value => contains(value.modified, 'dns/')))) }}
         env:
           TARGET_PATH: /opt/EDEN/dns
         run: |
