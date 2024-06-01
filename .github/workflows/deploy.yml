@@ -17,4 +17,5 @@ jobs:
       env:
         TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
       run: |
+        cp -R $TARGET_PATH $TARGET_PATH.bak
         find . -path ./.git -prune -o -path ./.github -prune -o -exec cp -R --parents {} $TARGET_PATH \;
