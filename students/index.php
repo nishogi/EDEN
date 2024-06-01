@@ -339,7 +339,7 @@
                             echo "<div class='separator'></div>";
                         }
                     }
-                    echo createVM("nrocq-CSC4101-1", "truc")
+                    echo createVM("nrocq-CSC4101-1", "truc");
                     ?>
         </ul>
         <hr class="my-4">
