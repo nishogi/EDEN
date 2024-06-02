@@ -184,10 +184,8 @@ function deleteVM($name) {
 
     curl_close($curl);
 }
-
-// Fonction pour savoir si la VM existe déjà ou pas
+// Function to check if the VM already exists
 function existingVM($VMname) {
-    // On obtient l'ensemble des données au format JSON
     $url = "https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu";
     $headers = array(
         'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
@@ -199,26 +197,30 @@ function existingVM($VMname) {
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
     $vmListResult = curl_exec($curl);
+    if ($vmListResult === false) {
+        error_log("CURL error: " . curl_error($curl));
+        curl_close($curl);
+        return false;
+    }
     curl_close($curl);
 
-    // Décodage des données brutes afin d'en extraite le nom des VM
     $vmListData = json_decode($vmListResult, true);
-
-    $result = false;
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON decode error: " . json_last_error_msg());
+        return false;
+    }
 
     foreach ($vmListData['data'] as $vm) {
-        if (strcmp($vm['name'], $VMname)==0) {
-            // Si même nom, alors resultat à true car la VM existe déjà pour cet user
-            $result = true;
+        if (strcmp($vm['name'], $VMname) == 0) {
+            return true;
         }
     }
 
-    return $result;
+    return false;
 }
 
-// Fonction permettant d'obtenir le prochain ID disponible pour la création de VM
+// Function to get the next available VM ID
 function getNextAvailableVMID() {
-    // On obtient l'ensemble des données au format JSON
     $url = 'https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu';
     $headers = array(
         'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
@@ -230,21 +232,25 @@ function getNextAvailableVMID() {
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
     $vmListResult = curl_exec($curl);
+    if ($vmListResult === false) {
+        error_log("CURL error: " . curl_error($curl));
+        curl_close($curl);
+        return false;
+    }
     curl_close($curl);
-    //echo "$vmListResult\n";
 
-    // Décodage des données brutes afin d'en extraite le nom des VM
     $data = json_decode($vmListResult, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON decode error: " . json_last_error_msg());
+        return false;
+    }
 
-
-    // Extraire les IDs des VMs existantes
     $existingVMIDs = [];
     foreach ($data['data'] as $vm) {
         $existingVMIDs[] = (int)$vm['vmid'];
     }
 
-    // Trouver le premier ID disponible
-    $nextAvailableID = 4000; // Début à partir de 4000 pour les VM de prof
+    $nextAvailableID = 100;
     while (in_array($nextAvailableID, $existingVMIDs)) {
         $nextAvailableID++;
     }
@@ -252,57 +258,55 @@ function getNextAvailableVMID() {
     return $nextAvailableID;
 }
 
-// Fonction permettant de créer une VM pour un étudiant (cloner la VM du prof pour le module)
+// Function to create a VM for a student by cloning the professor's VM
 function createVM($VMname, $sshPublicKey) {
     $userName = $_SERVER['REMOTE_USER'];
-
     $tofu_file_name = "/var/www/tofu/variables.auto.tfvars";
 
-    // Création de la clé de sémaphore
     $key = ftok($tofu_file_name, 'a');
-    
-    // Obtention d'un sémaphore
     $sem_id = sem_get($key, 1, 0666, 1);
-    
     if (!$sem_id) {
-        die("Impossible d'obtenir un sémaphore\n");
+        error_log("Unable to get semaphore");
+        return false;
     }
 
-    // Acquisition du sémaphore (attendre si nécessaire)
     if (!sem_acquire($sem_id)) {
-        die("Impossible d'acquérir le sémaphore\n");
+        error_log("Unable to acquire semaphore");
+        return false;
     }
 
     try {
-        // Modifier le fichier variables.auto.tfvars
         $folderPath = "/var/www/tofu";
         $filePath = '/var/www/tofu/variables.auto.tfvars';
         $vmID = getNextAvailableVMID();
+        if ($vmID === false) {
+            throw new Exception("Failed to get next available VM ID");
+        }
 
         $VMname_clone = substr($VMname, 0, 7);
         $cloneID = getVMId($VMname_clone);
+        if ($cloneID === false) {
+            throw new Exception("Failed to get VM ID for cloning");
+        }
 
         modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
-
-        // Exécuter les commandes tofu
         executeTofuCommands($filePath, $folderPath);
 
     } catch (Exception $e) {
-        echo "Erreur : " . $e->getMessage();
+        error_log("Error: " . $e->getMessage());
+        return false;
     } finally {
-        // Libération du sémaphore
         sem_release($sem_id);
     }
 
     return $userName . " / " . $VMname . " / " . $sshPublicKey;
 }
 
-// Fonction permettant de modifier les variables dans le fichier de conf de tofu
+// Function to modify the variables in the tofu configuration file
 function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname) {
-    // Lire le fichier ligne par ligne
     $file = fopen($filePath, "r");
     if (!$file) {
-        throw new Exception("Impossible d'ouvrir le fichier : " . $filePath);
+        throw new Exception("Unable to open file: " . $filePath);
     }
 
     $lines = [];
@@ -311,17 +315,15 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
     }
     fclose($file);
 
-    // Modifier les lignes spécifiques
     $lines[2]  = "clone_vm_id            = $cloneID\n";
     $lines[5]  = "cloudinit_ssh_keys     = [\"$sshPublicKey\"]\n";
     $lines[6]  = "cloudinit_user_account = \"$userName\"\n";
     $lines[18] = "vm_id                  = $vmID\n";
     $lines[21] = "vm_name                = \"$VMname\"\n";
 
-    // Écrire les lignes modifiées dans le fichier
     $file = fopen($filePath, "w");
     if (!$file) {
-        throw new Exception("Impossible d'ouvrir le fichier en écriture : " . $filePath);
+        throw new Exception("Unable to open file for writing: " . $filePath);
     }
 
     foreach ($lines as $line) {
@@ -330,29 +332,26 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
     fclose($file);
 }
 
-// Fonction permettant d'exécuter les commandes de tofu afin de lancer la création
+// Function to execute tofu commands to create the VM
 function executeTofuCommands($filePath, $folderPath) {
-    // Initialiser la configuration tofu
     $initOutput = shell_exec("tofu -chdir=$folderPath init 2>&1");
     if ($initOutput === null) {
-        throw new Exception("Erreur lors de l'initialisation de tofu.");
+        throw new Exception("Error during tofu initialization.");
     }
 
-    // Planifier les changements
     $planOutput = shell_exec("tofu -chdir=$folderPath plan -lock=false 2>&1");
     if ($planOutput === null) {
-        throw new Exception("Erreur lors de la planification de tofu.");
+        throw new Exception("Error during tofu planning.");
     }
 
-    // Appliquer les changements et confirmer avec 'yes'
     $applyOutput = shell_exec("echo yes | tofu -chdir=$folderPath apply -lock=false 2>&1");
     if ($applyOutput === null) {
-        throw new Exception("Erreur lors de l'application de tofu.");
+        throw new Exception("Error during tofu apply.");
     }
-    echo "VM créée avec succès. Résultat : <pre>$initOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$planOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$applyOutput</pre>";
-}
 
+    echo "VM created successfully. Result: <pre>$initOutput</pre>";
+    echo "---------------------------------------------------------------------------------------------------------------------------------";
+    echo "VM created successfully. Result: <pre>$planOutput</pre>";
+    echo "---------------------------------------------------------------------------------------------------------------------------------";
+    echo "VM created successfully. Result: <pre>$applyOutput</pre>";
+}
