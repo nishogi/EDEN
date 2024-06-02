@@ -10,6 +10,43 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
+    function showLoadingSwal(title, text) {
+        Swal.fire({
+            title: title,
+            text: text,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    }
+
+    function showSuccessSwal(text) {
+        Swal.fire({
+            title: 'Succès!',
+            text: text,
+            icon: 'success',
+            timer: 2000
+        }).then(() => {
+            location.reload();
+        });
+    }
+
+    function pollVMStatus(vmName, expectedStatus) {
+        return new Promise((resolve) => {
+            const checkStatus = setInterval(() => {
+                fetch(`ajax_functions.php?action=checkVMStatus&name=${encodeURIComponent(vmName)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === expectedStatus) {
+                            clearInterval(checkStatus);
+                            resolve();
+                        }
+                    });
+            }, 2000); // Check status every 2 seconds
+        });
+    }
+
     function confirmStartVM(name) {
         Swal.fire({
             title: 'Confirmation',
@@ -20,45 +57,15 @@
             cancelButtonText: 'Non, annuler'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Envoi d'une requête AJAX pour démarrer la VM
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "ajax_functions.php?action=startVM&name=" + encodeURIComponent(name), true);
-                xhr.send();
-
-                Swal.fire({
-                    title: 'Veuillez patienter',
-                    text: 'La VM est en cours de démarrage...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                // Poll the VM status until it is confirmed to be running
-                var checkStatus = setInterval(function () {
-                    var xhrStatus = new XMLHttpRequest();
-                    xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(name), true);
-                    xhrStatus.onreadystatechange = function() {
-                        if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
-                            var response = JSON.parse(xhrStatus.responseText);
-                            if (response.status === 'running') {
-                                clearInterval(checkStatus);
-                                Swal.close();
-                                Swal.fire({
-                                    title: 'Succès!',
-                                    text: 'VM démarrée !',
-                                    icon: 'success',
-                                    timer: 2000
-                                }).then(() => {
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 2000);
-                                });
-                            }
-                        }
-                    }
-                    xhrStatus.send();
-                }, 2000); // Check status every 2 seconds
+                fetch(`ajax_functions.php?action=startVM&name=${encodeURIComponent(name)}`)
+                    .then(() => {
+                        showLoadingSwal('Veuillez patienter', 'La VM est en cours de démarrage...');
+                        return pollVMStatus(name, 'running');
+                    })
+                    .then(() => {
+                        Swal.close();
+                        showSuccessSwal('VM démarrée !');
+                    });
             }
         });
     }
@@ -73,45 +80,15 @@
             cancelButtonText: 'Non, annuler'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Envoi d'une requête AJAX pour arrêter la VM
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "ajax_functions.php?action=stopVM&name=" + encodeURIComponent(name), true);
-                xhr.send();
-
-                Swal.fire({
-                    title: 'Veuillez patienter',
-                    text: 'La VM est en cours d\'arrêt...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                // Poll the VM status until it is confirmed to be stopped
-                var checkStatus = setInterval(function () {
-                    var xhrStatus = new XMLHttpRequest();
-                    xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(name), true);
-                    xhrStatus.onreadystatechange = function() {
-                        if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
-                            var response = JSON.parse(xhrStatus.responseText);
-                            if (response.status === 'stopped') {
-                                clearInterval(checkStatus);
-                                Swal.close();
-                                Swal.fire({
-                                    title: 'Succès!',
-                                    text: 'VM arrêtée !',
-                                    icon: 'success',
-                                    timer: 2000
-                                }).then(() => {
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 2000);
-                                });
-                            }
-                        }
-                    }
-                    xhrStatus.send();
-                }, 2000); // Check status every 2 seconds
+                fetch(`ajax_functions.php?action=stopVM&name=${encodeURIComponent(name)}`)
+                    .then(() => {
+                        showLoadingSwal('Veuillez patienter', 'La VM est en cours d\'arrêt...');
+                        return pollVMStatus(name, 'stopped');
+                    })
+                    .then(() => {
+                        Swal.close();
+                        showSuccessSwal('VM arrêtée !');
+                    });
             }
         });
     }
@@ -119,7 +96,7 @@
     function confirmCreateVM(vmName) {
         Swal.fire({
             title: 'Clé SSH',
-            padding: '1rem 1rem 1rem 1rem'
+            padding: '1rem',
             input: 'textarea',
             inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
             inputPlaceholder: 'Entrez votre clé ssh publique ici...',
@@ -129,49 +106,20 @@
             showCancelButton: true,
         }).then((result) => {
             if (result.isConfirmed && result.value) {
-                var sshPublicKey = result.value;
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "ajax_functions.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        Swal.fire({
-                            title: 'Veuillez patienter',
-                            text: 'La VM est en cours de création...',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        // Poll the VM status until it is confirmed to be running
-                        var checkStatus = setInterval(function () {
-                            var xhrStatus = new XMLHttpRequest();
-                            xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(vmName), true);
-                            xhrStatus.onreadystatechange = function() {
-                                if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
-                                    var response = JSON.parse(xhrStatus.responseText);
-                                    if (response.status === 'running') {
-                                        clearInterval(checkStatus);
-                                        Swal.close();
-                                        Swal.fire({
-                                            title: 'Succès!',
-                                            text: 'VM créée avec succès et elle est en cours d\'exécution!',
-                                            icon: 'success',
-                                            timer: 2000
-                                        }).then(() => {
-                                            setTimeout(() => {
-                                                location.reload();
-                                            }, 2000);
-                                        });
-                                    }
-                                }
-                            };
-                            xhrStatus.send();
-                        }, 2000); // Check status every 2 seconds
-                    }
-                };
-                xhr.send("action=createVM&name=" + encodeURIComponent(vmName) + "&ssh_public_key=" + encodeURIComponent(sshPublicKey));
+                const sshPublicKey = result.value;
+                fetch("ajax_functions.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `action=createVM&name=${encodeURIComponent(vmName)}&ssh_public_key=${encodeURIComponent(sshPublicKey)}`
+                }).then(() => {
+                    showLoadingSwal('Veuillez patienter', 'La VM est en cours de création...');
+                    return pollVMStatus(vmName, 'running');
+                }).then(() => {
+                    Swal.close();
+                    showSuccessSwal('VM créée avec succès et elle est en cours d\'exécution!');
+                });
             }
         });
     }
