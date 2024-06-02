@@ -50,7 +50,9 @@
                                     icon: 'success',
                                     timer: 2000
                                 }).then(() => {
-                                    location.reload();
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 2000);
                                 });
                             }
                         }
@@ -101,7 +103,9 @@
                                     icon: 'success',
                                     timer: 2000
                                 }).then(() => {
-                                    location.reload();
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 2000);
                                 });
                             }
                         }
@@ -115,15 +119,14 @@
     function confirmCreateVM(vmName) {
         Swal.fire({
             title: 'Clé SSH',
+            padding: '1rem 1rem 1rem 1rem'
             input: 'textarea',
             inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
             inputPlaceholder: 'Entrez votre clé ssh publique ici...',
             inputAttributes: {
-                'aria-label': 'Entrez votre clé ssh publique ici',
-                style: 'padding: 1rem;'
+                'aria-label': 'Entrez votre clé ssh publique ici'
             },
             showCancelButton: true,
-            padding: '1rem'
         }).then((result) => {
             if (result.isConfirmed && result.value) {
                 var sshPublicKey = result.value;
@@ -157,7 +160,9 @@
                                             icon: 'success',
                                             timer: 2000
                                         }).then(() => {
-                                            location.reload();
+                                            setTimeout(() => {
+                                                location.reload();
+                                            }, 2000);
                                         });
                                     }
                                 }
