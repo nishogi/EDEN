@@ -252,11 +252,8 @@ function getNextAvailableVMID() {
 
     sort($existingVMIDs);
 
-    $nextAvailableID = 100; // Starting ID
-    foreach ($existingVMIDs as $existingID) {
-        if ($nextAvailableID < $existingID) {
-            break;
-        }
+    $nextAvailableID = 105; // Starting ID for VMs
+    while (in_array($nextAvailableID, $existingVMIDs)) {
         $nextAvailableID++;
     }
 
@@ -288,18 +285,15 @@ function createVM($VMname, $sshPublicKey) {
             throw new Exception("Failed to get next available VM ID");
         }
 
-        // Check if the VM configuration file already exists
-        $configFilePath = "/etc/pve/nodes/atlantis/qemu-server/$vmID.conf";
-        if (file_exists($configFilePath)) {
-            throw new Exception("VM configuration file already exists: $configFilePath");
-        }
+        $firstDashPos = strpos($VMname, '-') + 1; // Find the position of the first dash and move to the character after it
+        $VMname_clone = substr($VMname, 0 , $firstDashPos); 
+        
+        $cloneID = getVMId($VMname_clone);
 
-        $VMname_clone = substr($VMname, 0, 7);
         $cloneID = getVMId($VMname_clone);
         if ($cloneID === false) {
             throw new Exception("Failed to get VM ID for cloning");
         }
-        echo ($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
         modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
         executeTofuCommands($filePath, $folderPath);
 
@@ -359,11 +353,5 @@ function executeTofuCommands($filePath, $folderPath) {
     if ($applyOutput === null) {
         throw new Exception("Error during tofu apply.");
     }
-
-    echo "VM created successfully. Result: <pre>$initOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM created successfully. Result: <pre>$planOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM created successfully. Result: <pre>$applyOutput</pre>";
 }
 ?>
