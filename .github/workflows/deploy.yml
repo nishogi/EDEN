@@ -14,11 +14,11 @@ jobs:
 
       - name: Deploy Proxy
         env:
-          TARGET_PATH: /opt/EDEN/
+          TARGET_PATH: /opt/EDEN/proxy
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
-          cp -R ./proxy $TARGET_PATH
+          cp -R ./proxy/* $TARGET_PATH
 
   copy-tofu-config:
     runs-on: self-hosted
@@ -28,11 +28,11 @@ jobs:
 
       - name: Deploy Tofu
         env:
-          TARGET_PATH: /var/www/
+          TARGET_PATH: /var/www/tofu
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
-          cp -R ./tofu $TARGET_PATH
+          cp -R ./tofu/* $TARGET_PATH
 
   copy-dns-config:
     runs-on: self-hosted
@@ -42,11 +42,11 @@ jobs:
 
       - name: Deploy DNS
         env:
-          TARGET_PATH: /opt/EDEN/
+          TARGET_PATH: /opt/EDEN/dns
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
-          cp -R ./dns $TARGET_PATH
+          cp -R ./dns/* $TARGET_PATH
 
   deploy-eden:
     runs-on: self-hosted
@@ -61,4 +61,4 @@ jobs:
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
-          cp -R ./website $TARGET_PATH
+          cp -R ./website/* $TARGET_PATH
