@@ -14,7 +14,7 @@ jobs:
 
       - name: Deploy Proxy
         env:
-          TARGET_PATH: /opt/EDEN/proxy
+          TARGET_PATH: /opt/EDEN/
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy Tofu
         env:
-          TARGET_PATH: /var/www/tofu
+          TARGET_PATH: /var/www/
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy DNS
         env:
-          TARGET_PATH: /opt/EDEN/dns
+          TARGET_PATH: /opt/EDEN/
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
