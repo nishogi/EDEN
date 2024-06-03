@@ -70,3 +70,6 @@ variable "create_new_vm" {
   type        = bool
   default     = false
 }
+variable "ip" {
+  type = string
+}
