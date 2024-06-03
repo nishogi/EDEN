@@ -120,7 +120,7 @@
             if (result.isConfirmed) {
                 fetch(`ajax_functions.php?action=deleteVM&name=${encodeURIComponent(name)}`)
                     .then(() => {
-                        showLoadingSwal('Veuillez patienter', 'La VM est en cours de suppresion...');
+                        showLoadingSwal(pollVMStatusDelete(name));
                         return pollVMStatusDelete(name);
                     })
                     .then(() => {
