@@ -238,7 +238,7 @@
                     ini_set('display_errors', 1);
 
                     // Chemin vers le fichier de conf des cours
-                    $cheminFichier = '/var/www/website/config_cours/liste_cours.conf';
+                    $cheminFichier = '../config_cours/liste_cours.conf';
 
                     // Lire les lignes du fichier et les stocker dans un tableau
                     $lignes = file($cheminFichier);
@@ -249,7 +249,7 @@
                     foreach ($lignes as $ligne) {
                         // On vérifie si l'utilisateur est dans le cours
                         $ligne = substr($ligne, 0, -1);
-                        $fichierCours = "/var/www/website/config_cours/cours/$ligne.conf";
+                        $fichierCours = "../config_cours/cours/$ligne.conf";
                         $users = file($fichierCours);
                         foreach($users as $user) {
                             if ($user == $_SERVER['REMOTE_USER']) {
