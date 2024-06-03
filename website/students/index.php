@@ -146,6 +146,30 @@
                 });
             }
         });
+
+    function confirmAccessVM(name) {
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Souhaitez-vous accéder à la VM : " + name + " ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non, annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`ajax_functions.php?action=deleteVM&name=${encodeURIComponent(name)}`)
+                    .then(() => {
+                        showLoadingSwal('Veuillez patienter', 'La VM est en cours de suppresion...');
+                        return pollVMStatus(name, null);
+                    })
+                    .then(() => {
+                        Swal.close();
+                        showSuccessSwal('VM supprimée !');
+                    });
+            }
+        });
+    }
+
     }
 </script>
   <style>
@@ -245,7 +269,7 @@
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo "<button class='btn btn-primary boutonVM'>Accéder</button>";
+                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName')\">Accéder</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
@@ -287,10 +311,13 @@
                         // On vérifie si la VM n'existe pas déjà
                         $VMname = $cour . "-" . $_SERVER['REMOTE_USER'] . "-1";
                         if (existingVM($VMname) == false) {
-                            echo "<li class='list-group-item'>$VMname";
-                            echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
-                            echo "</li>";
-                            echo "<div class='separator'></div>";
+                            # On vérifie si le template du cours existe
+                            if (existingVM($cour) == true) {
+                                echo "<li class='list-group-item'>$VMname";
+                                echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
+                                echo "</li>";
+                                echo "<div class='separator'></div>";
+                            }
                         }
                     }
 
