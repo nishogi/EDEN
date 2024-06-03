@@ -248,6 +248,8 @@
 
                     include 'students_functions.php';
 
+                    echo createVM("NET4101-mwilliot-1", "clé_ssh");
+
                     // Format des noms de VM recherchés
                     $vmNamePattern = strval($_SERVER['REMOTE_USER']) . '-1';
     
@@ -275,8 +277,6 @@
                     // For debug
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
-
-                    echo createVM("NET4101-mwilliot-1", "clé_ssh");
 
                     // Chemin vers le fichier de conf des cours
                     $cheminFichier = '../config_cours/liste_cours.conf';
