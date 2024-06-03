@@ -236,32 +236,39 @@
                     // For debug
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
-    
-                    // Chemin vers le fichier de conf temporaire, à l'avenir cela sera changé
-                    $cheminFichier = 'cours.conf';
-    
+
+                    // Chemin vers le fichier de conf des cours
+                    $cheminFichier = '/var/www/website/config_cours/liste_cours.conf';
+
                     // Lire les lignes du fichier et les stocker dans un tableau
                     $lignes = file($cheminFichier);
-    
-                    // Fonction servant juste pour la suite pour l'affichage de la barre dans les VM à créer
-                    $taille = 0;
+
+
+                    echo "<ul>";
+                    $cours = [];
                     foreach ($lignes as $ligne) {
-                        $VMname = trim($ligne) . "-" . $_SERVER['REMOTE_USER'] . "-1";
-                        if (!existingVM($VMname)) {
-                            $taille = $taille + 1;
+                        // On vérifie si l'utilisateur est dans le cours
+                        $ligne = substr($ligne, 0, -1);
+                        $fichierCours = "/var/www/website/config_cours/cours/$ligne.conf";
+                        $users = file($fichierCours);
+                        foreach($users as $user) {
+                            if ($user == $_SERVER['REMOTE_USER']) {
+                                $cours[] = $ligne;
+                            }
                         }
                     }
-    
-                    foreach ($lignes as $ligne) {
+
+                    foreach ($cours as $cour) {
                         // On vérifie si la VM n'existe pas déjà
-                        $VMname = trim($ligne) . "-" . $_SERVER['REMOTE_USER'] . "-1";
-                        if (!existingVM($VMname)) {
+                        $VMname = $cour . "-" . $_SERVER['REMOTE_USER'] . "-1";
+                        if (existingVM($VMname) == false) {
                             echo "<li class='list-group-item'>$ligne";
                             echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
                             echo "</li>";
                             echo "<div class='separator'></div>";
                         }
                     }
+
                 ?>
         </ul>
         <hr class="my-4">
