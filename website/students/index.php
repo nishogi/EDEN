@@ -252,9 +252,6 @@
                         $fichierCours = "../config_cours/cours/$ligne.conf";
                         $users = file($fichierCours);
                         foreach($users as $user) {
-                            echo $user;
-                            $bis = substr($user, 0, -1);
-                            echo $bis;
                             if ($user == $_SERVER['REMOTE_USER']) {
                                 $cours[] = $ligne;
                             }
@@ -265,7 +262,7 @@
                         // On vérifie si la VM n'existe pas déjà
                         $VMname = $cour . "-" . $_SERVER['REMOTE_USER'] . "-1";
                         if (existingVM($VMname) == false) {
-                            echo "<li class='list-group-item'>$ligne";
+                            echo "<li class='list-group-item'>$VMname";
                             echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
                             echo "</li>";
                             echo "<div class='separator'></div>";
