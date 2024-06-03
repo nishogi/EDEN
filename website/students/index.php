@@ -277,7 +277,6 @@
                         $users = file($fichierCours);
                         foreach($users as $user) {
                             $user = substr($user, 0, -1);
-                            echo $user;
                             if ($user == $_SERVER['REMOTE_USER']) {
                                 $cours[] = $ligne;
                             }

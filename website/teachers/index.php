@@ -247,6 +247,7 @@
                     $fichierCours = "../config_cours/cours/$ligne.conf";
                     $users = file($fichierCours);
                     foreach($users as $user) {
+                        $user = substr($user, 0, -1);
                         if ($user == $_SERVER['REMOTE_USER']) {
                             $cours[] = $ligne;
                         }
@@ -293,6 +294,7 @@
                 $fichierCours = "../config_cours/cours/$ligne.conf";
                 $users = file($fichierCours);
                 foreach($users as $user) {
+                    $user = substr($user, 0, -1);
                     if ($user == $_SERVER['REMOTE_USER']) {
                         $cours[] = $ligne;
                     }
