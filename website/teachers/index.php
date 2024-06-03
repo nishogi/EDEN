@@ -53,7 +53,7 @@
                 fetch(`ajax_functions.php?action=existingVM&VMname=${encodeURIComponent(vmName)}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.result === FALSE) {
+                        if (data.result === false) {
                             clearInterval(checkStatus);
                             resolve();
                         }
