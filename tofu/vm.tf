@@ -9,7 +9,7 @@ resource "proxmox_virtual_environment_vm" "user_example2" {
   name            = var.vm_name
   node_name       = var.node_name
   scsi_hardware   = "virtio-scsi-single"
-  started         = false
+  started         = true
   tablet_device   = false
   vm_id           = var.vm_id
 
@@ -50,7 +50,7 @@ resource "proxmox_virtual_environment_vm" "user_example2" {
     }
     ip_config {
       ipv4 {
-        address = "157.159.11.219/24"
+        address = var.ip
         gateway = ""
       }
     }
