@@ -285,7 +285,7 @@ function createVM($VMname, $sshPublicKey) {
             throw new Exception("Failed to get next available VM ID");
         }
 
-        $firstDashPos = strpos($VMname, '-') + 1; // Find the position of the first dash and move to the character after it
+        $firstDashPos = strpos($VMname, '-'); // Find the position of the first dash
         $VMname_clone = substr($VMname, 0 , $firstDashPos); 
         echo $VMname_clone;
         
