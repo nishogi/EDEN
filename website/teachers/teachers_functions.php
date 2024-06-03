@@ -254,7 +254,7 @@ function getNextAvailableVMID() {
     return $nextAvailableID;
 }
 
-// Fonction permettant de créer une VM pour un étudiant (cloner la VM du prof pour le module)
+// Fonction permettant de créer une VM pour un professeur (cloner la VM template de base)
 function createVM($VMname, $sshPublicKey) {
     $userName = $_SERVER['REMOTE_USER'];
 
@@ -281,7 +281,8 @@ function createVM($VMname, $sshPublicKey) {
         $filePath = '../../tofu/variables.auto.tfvars';
         $vmID = getNextAvailableVMID();
 
-        $VMname_clone = substr($VMname, 0, 7);
+        // Nom de la VM template de base qui est sur Proxmox
+        $VMname_clone = "template";
         $cloneID = getVMId($VMname_clone);
 
         modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);

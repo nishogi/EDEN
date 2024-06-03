@@ -1,6 +1,6 @@
 <?php
 
-include 'teachers   _functions.php';
+include 'teachers_functions.php';
 
 // Traitement de la requête AJAX
 if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["action"])) {
