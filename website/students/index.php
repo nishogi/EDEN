@@ -276,6 +276,7 @@
                         $fichierCours = "../config_cours/cours/$ligne.conf";
                         $users = file($fichierCours);
                         foreach($users as $user) {
+                            echo $user;
                             if ($user == $_SERVER['REMOTE_USER']) {
                                 $cours[] = $ligne;
                             }
