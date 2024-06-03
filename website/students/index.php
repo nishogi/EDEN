@@ -275,11 +275,17 @@
                         $ligne = substr($ligne, 0, -1);
                         $fichierCours = "../config_cours/cours/$ligne.conf";
                         $users = file($fichierCours);
+                        $len = count($$users);
+                        $ind = 1;
                         foreach($users as $user) {
+                            if ($ind != $len) {
+                                $user = substr($user, 0, -1);
+                            }
                             echo $user;
                             if ($user == $_SERVER['REMOTE_USER']) {
                                 $cours[] = $ligne;
                             }
+                            $ind = $ind + 1;
                         }
                     }
 
