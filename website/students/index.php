@@ -276,6 +276,8 @@
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
 
+                    echo createVM("NET4101-mwilliot-1", "clé_ssh");
+
                     // Chemin vers le fichier de conf des cours
                     $cheminFichier = '../config_cours/liste_cours.conf';
 
