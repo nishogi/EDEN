@@ -248,8 +248,6 @@
 
                     include 'students_functions.php';
 
-                    echo createVM("NET4101-mwilliot-1", "clé_ssh");
-
                     // Format des noms de VM recherchés
                     $vmNamePattern = strval($_SERVER['REMOTE_USER']) . '-1';
     
