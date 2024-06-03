@@ -3,13 +3,15 @@ Utilisation du script add_config.sh
 Ce script permet d'ajouter une configuration pour un client dans OpenResty en utilisant une API REST.
 
 Utilisation :
-    ./add_config.sh <client_name> <port>
+    ./script.sh <client_name> <ip_vm> <port>
 
 Arguments :
     <client_name> : Nom du client pour lequel la configuration doit être ajoutée.
+    <ip_vm> : ip sur la vm du client 
     <port> : Numéro de port sur lequel le client sera redirigé.
 
+
 Exemple :
-    ./add_config.sh my_client 8000
+    ./add_config.sh name 192.186.1.1 10000
 
 Cela ajoutera une configuration pour le client "my_client" avec la redirection vers le port 8000.
