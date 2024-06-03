@@ -154,7 +154,7 @@
                     body: `action=createVM&name=${encodeURIComponent(vmName)}&ssh_public_key=${encodeURIComponent(sshPublicKey)}`
                 }).then(() => {
                     showLoadingSwal('Veuillez patienter', 'La VM est en cours de création...');
-                    return pollVMStatus(vmName, 'running');
+                    return pollVMStatus(vmName, 'stopped');
                 }).then(() => {
                     Swal.close();
                     showSuccessSwal('VM créée avec succès et elle est en cours d\'exécution!');

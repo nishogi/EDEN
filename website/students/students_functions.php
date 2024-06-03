@@ -287,11 +287,8 @@ function createVM($VMname, $sshPublicKey) {
 
         $firstDashPos = strpos($VMname, '-'); // Find the position of the first dash
         $VMname_clone = substr($VMname, 0 , $firstDashPos); 
-        echo $VMname_clone;
         
         $cloneID = getVMId($VMname_clone);
-        echo "_____";
-        echo $cloneID;
 
         if ($cloneID === false) {
             throw new Exception("Failed to get VM ID for cloning");
@@ -356,10 +353,5 @@ function executeTofuCommands($filePath, $folderPath) {
         throw new Exception("Error during tofu apply.");
     }
 
-    echo "VM créée avec succès. Résultat : <pre>$initOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$planOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$applyOutput</pre>";
 }
 ?>
