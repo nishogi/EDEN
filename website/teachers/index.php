@@ -316,7 +316,7 @@
 
             foreach ($cours as $cour) {
                 // On vérifie si la VM n'existe pas déjà
-                $VMname = $cour . "-" . $_SERVER['REMOTE_USER'] . "-1";
+                $VMname = $cour;
                 if (existingVM($VMname) == false) {
                     echo "<li class='list-group-item'>$VMname";
                     echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
