@@ -9,25 +9,24 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["action"])) {
 
     if ($action === "startVM") {
         startVM($name);
-    }
-
-    if ($action === "stopVM") {
+    } elseif ($action === "stopVM") {
         stopVM($name);
-    }
-
-    if ($action === "deleteVM") {
+    } elseif ($action === "deleteVM") {
         deleteVM($name);
+    } elseif ($action === "checkVMStatus") {
+        $VMId = getVMId($name);
+        $status = checkVMStatus($VMId);
+        echo json_encode(['status' => $status]);
     }
 }
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST["action"];
     $name = $_POST["name"];
     $sshPublicKey = $_POST["ssh_public_key"];
 
     if ($action === "createVM") {
-        //createVM($name, $sshPublicKey);
         $result = createVM($name, $sshPublicKey);
         echo $result; // Ceci enverra la réponse au client
     }
