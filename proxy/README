@@ -1,17 +1,20 @@
 Utilisation du script add_config.sh
 
-Ce script permet d'ajouter une configuration pour un client dans OpenResty en utilisant une API REST.
+Ce script permet d'ajouter/supprimer une entrée proxy pour un client (dans le but de se ssh a sa vm) dans OpenResty en utilisant une API REST (flask).
 
 Utilisation :
-    ./script.sh <client_name> <ip_vm> <port>
+    ./script.sh add <client_name> <ip_vm> <port>
+ou
+    ./script.sh rm <client_name>
 
 Arguments :
-    <client_name> : Nom du client pour lequel la configuration doit être ajoutée.
+    <client_name> : Nom du client pour lequel la configuration doit être ajoutée/supprimée.
     <ip_vm> : ip sur la vm du client 
     <port> : Numéro de port sur lequel le client sera redirigé.
 
 
 Exemple :
-    ./add_config.sh name 192.186.1.1 10000
+    ./script.sh name 192.186.1.1 10000
+    ./script.sh name
 
-Cela ajoutera une configuration pour le client "my_client" avec la redirection vers le port 8000.
+
