@@ -11,7 +11,7 @@ node_name              = "atlantis"
 pve_api_token          = "root@pam!tofu_token2_root=f07a58b7-bd81-4180-a92c-9798d02b6f1b"
 pve_host_address       = "https://157.159.104.154:8006"
 tmp_dir                = "/tmp"
-vm_bridge_lan          = "vmbr11"
+vm_bridge_lan          = "vmbr2"
 vm_cpu_cores_number    = 2
 vm_cpu_type            = "x86-64-v2-AES"
 vm_description         = "Managed by terraform."
