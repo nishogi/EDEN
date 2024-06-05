@@ -347,6 +347,9 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
 
     $IP = $IP . "/16";
 
+    echo "IP :";
+    echo $IP;
+
     $lines[2]  = "clone_vm_id            = $cloneID\n";
     $lines[5]  = "cloudinit_ssh_keys     = [\"$sshPublicKey\"]\n";
     $lines[6]  = "cloudinit_user_account = \"$userName\"\n";
