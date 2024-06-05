@@ -293,6 +293,7 @@
                     // Lire les lignes du fichier et les stocker dans un tableau
                     $lignes = file($cheminFichier);
 
+                    echo createVM("IMG4101-mwilliot-1");
 
                     echo "<ul>";
                     $cours = [];
