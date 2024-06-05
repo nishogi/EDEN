@@ -293,8 +293,8 @@ function createVM($VMname, $sshPublicKey) {
         if ($cloneID === false) {
             throw new Exception("Failed to get VM ID for cloning");
         }
-        modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
-        executeTofuCommands($filePath, $folderPath);
+        $f1 = modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
+        $f2 = executeTofuCommands($filePath, $folderPath);
 
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
@@ -306,7 +306,7 @@ function createVM($VMname, $sshPublicKey) {
     $ID = getIPfromID($vmID);
     $port = getPortfromID($vmID);
 
-    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port;
+    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port . " / " . $f1 . " / " . $f2;
 }
 
 
@@ -363,6 +363,8 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
         fwrite($file, $line);
     }
     fclose($file);
+
+    return "modifvariable";
 }
 
 // Function to execute tofu commands to create the VM
@@ -381,6 +383,14 @@ function executeTofuCommands($filePath, $folderPath) {
     if ($applyOutput === null) {
         throw new Exception("Error during tofu apply.");
     }
+
+    echo "VM créée avec succès. Résultat : <pre>$initOutput</pre>";
+    echo "---------------------------------------------------------------------------------------------------------------------------------";
+    echo "VM créée avec succès. Résultat : <pre>$planOutput</pre>";
+    echo "---------------------------------------------------------------------------------------------------------------------------------";
+    echo "VM créée avec succès. Résultat : <pre>$applyOutput</pre>";
+
+    return "tofucommand";
 
 }
 ?>
