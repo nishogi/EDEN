@@ -314,9 +314,9 @@ function createVM($VMname, $sshPublicKey) {
 function getIPfromID($vmID) {
     $totID = $vmID - 4000;
 
-    $ip24 = $totID / 256 + 2;
+    $ip24 = floor($totID / 256) + 2;
 
-    $ip32 = $totID % 256;
+    $ip32 = $totID - floor($totID / 256) * 256;
 
     $IP = "192.168." . $ip24 . "." . $ip32;
 
