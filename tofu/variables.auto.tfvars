@@ -22,4 +22,4 @@ vm_memory_min          = 4096
 vm_name                = "NET4101-mwilliot-1"
 vm_socket_number       = 1
 create_new_vm          = false
-ip                     = "192.168.45.134/16"
+ip                     = "192.168.5.233/16"

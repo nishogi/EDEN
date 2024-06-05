@@ -93,6 +93,29 @@
         });
     }
 
+    function confirmStopVMbis(name) {
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Souhaitez-vous vraiment tester la VM : " + name + " ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non, annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`ajax_functions.php?action=stopVM&name=${encodeURIComponent(name)}`)
+                    .then(() => {
+                        showLoadingSwal('Veuillez patienter', 'La VM est en cours d\'arrêt...');
+                        return pollVMStatus(name, 'stopped');
+                    })
+                    .then(() => {
+                        Swal.close();
+                        showSuccessSwal('VM arrêtée !');
+                    });
+            }
+        });
+    }
+
     function confirmDeleteVM(name) {
         Swal.fire({
             title: 'Confirmation',
@@ -146,29 +169,6 @@
                 });
             }
         });
-
-    function confirmAccessVM(name) {
-        Swal.fire({
-            title: 'Confirmation',
-            text: "Souhaitez-vous vraiment allumer la VM : " + name + " ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non, annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`ajax_functions.php?action=startVM&name=${encodeURIComponent(name)}`)
-                    .then(() => {
-                        showLoadingSwal('Veuillez patienter', 'La VM est en cours de démarrage...');
-                        return pollVMStatus(name, 'running');
-                    })
-                    .then(() => {
-                        Swal.close();
-                        showSuccessSwal('VM démarrée !');
-                    });
-            }
-        });
-    }
 
     }
 </script>
@@ -271,7 +271,7 @@
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo "<button class='btn btn-success boutonVM' onclick=\"confirmAccessVM('$vmName')\">Allumer</button>";
+                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmStopVMbis('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
