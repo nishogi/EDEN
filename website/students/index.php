@@ -93,6 +93,29 @@
         });
     }
 
+    function confirmStopVMbis(name) {
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Souhaitez-vous vraiment tester la VM : " + name + " ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non, annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`ajax_functions.php?action=stopVM&name=${encodeURIComponent(name)}`)
+                    .then(() => {
+                        showLoadingSwal('Veuillez patienter', 'La VM est en cours d\'arrêt...');
+                        return pollVMStatus(name, 'stopped');
+                    })
+                    .then(() => {
+                        Swal.close();
+                        showSuccessSwal('VM arrêtée !');
+                    });
+            }
+        });
+    }
+
     function confirmDeleteVM(name) {
         Swal.fire({
             title: 'Confirmation',
@@ -146,29 +169,6 @@
                 });
             }
         });
-
-    function confirmAccessVM(name) {
-        Swal.fire({
-            title: 'Confirmation',
-            text: "Souhaitez-vous accéder à la VM : " + name + " ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non, annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`ajax_functions.php?action=deleteVM&name=${encodeURIComponent(name)}`)
-                    .then(() => {
-                        showLoadingSwal('Veuillez patienter', 'La VM est en cours de suppresion...');
-                        return pollVMStatus(name, null);
-                    })
-                    .then(() => {
-                        Swal.close();
-                        showSuccessSwal('VM supprimée !');
-                    });
-            }
-        });
-    }
 
     }
 </script>
@@ -261,15 +261,17 @@
                     $vmNamePattern = strval($_SERVER['REMOTE_USER']) . '-1';
     
                     $userVMs = getVMNames($vmNamePattern);
-    
+                    $userName = $_SERVER['REMOTE_USER'];
+
                     foreach ($userVMs as $vmName) {
                         $VMId = getVMId($vmName);
                         $status = checkVMStatus($VMId);
+                        $port = getPortfromID($VMId);
                         
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName')\">Accéder</button>";
+                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmStopVMbis('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
@@ -290,7 +292,8 @@
 
                     // Lire les lignes du fichier et les stocker dans un tableau
                     $lignes = file($cheminFichier);
-
+                    
+                    echo createVM("CSC4101-mwilliot-1", "ssh_key");
 
                     echo "<ul>";
                     $cours = [];
@@ -313,6 +316,7 @@
                         if (existingVM($VMname) == false) {
                             # On vérifie si le template du cours existe
                             if (existingVM($cour) == true) {
+                                echo $VMname;
                                 echo "<li class='list-group-item'>$VMname";
                                 echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
                                 echo "</li>";
