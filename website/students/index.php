@@ -256,7 +256,7 @@
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName', '$port', '$userName'')\">Accéder</button>";
+                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName', '$port', '$userName')\">Accéder</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
@@ -300,6 +300,7 @@
                         if (existingVM($VMname) == false) {
                             # On vérifie si le template du cours existe
                             if (existingVM($cour) == true) {
+                                echo $VMname;
                                 echo "<li class='list-group-item'>$VMname";
                                 echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
                                 echo "</li>";
