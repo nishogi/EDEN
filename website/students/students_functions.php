@@ -347,8 +347,6 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
 
     $IP = $IP . "/16";
 
-    $IP = "$IP";
-
     echo "IP :";
     echo $IP;
 
@@ -357,7 +355,7 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
     $lines[6]  = "cloudinit_user_account = \"$userName\"\n";
     $lines[18] = "vm_id                  = $vmID\n";
     $lines[21] = "vm_name                = \"$VMname\"\n";
-    $lines[24] = "ip                     = $IP";
+    $lines[24] = "ip                     = \"$IP\"";
 
     $file = fopen($filePath, "w");
     if (!$file) {
