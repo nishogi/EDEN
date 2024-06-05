@@ -22,7 +22,6 @@ else
     exit 1
 fi
 
-echo "$API_KEY"
 
 # Vérifier si c'est une opération d'ajout ou de suppression
 if [ "$USAGE" = "add" ]; then
