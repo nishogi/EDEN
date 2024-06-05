@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # Mac OS
 .DS_Store
+
+#Fichier env proxy
+proxy/env

@@ -14,13 +14,23 @@ CLIENT_NAME="$2"
 SERVER_ADDR="$3:22"
 PORT="$4"
 
+# Charger la clé API depuis le fichier env
+if [ -f ./env ]; then
+    source ./env
+else
+    echo "Fichier env manquant!"
+    exit 1
+fi
+
+echo "$API_KEY"
+
 # Vérifier si c'est une opération d'ajout ou de suppression
 if [ "$USAGE" = "add" ]; then
     # Faire la requête avec curl pour l'ajout
-    curl -X POST -H "Content-Type: application/json" -d '{"client_name":"'"$CLIENT_NAME"'", "port":"'"$PORT"'", "ip":"'"$SERVER_ADDR"'"}' "$API_ENDPOINT_ADD"
+    curl -X POST -H "Content-Type: application/json" -d '{"client_name":"'"$CLIENT_NAME"'", "port":"'"$PORT"'", "ip":"'"$SERVER_ADDR"'", "key":"'"$API_KEY"'"}' "$API_ENDPOINT_ADD"
 elif [ "$USAGE" = "rm" ]; then
     # Faire la requête avec curl pour la suppression
-    curl -X DELETE -H "Content-Type: application/json" -d '{"client_name":"'"$CLIENT_NAME"'"}' "$API_ENDPOINT_RM"
+    curl -X DELETE -H "Content-Type: application/json" -d '{"client_name":"'"$CLIENT_NAME"'", "key":"'"$API_KEY"'"}' "$API_ENDPOINT_RM"
 else
     echo "Usage: $0 <add|rm> <client_name> <server_addr> [<port>]"
     exit 1
