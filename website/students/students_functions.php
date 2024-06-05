@@ -296,15 +296,6 @@ function createVM($VMname, $sshPublicKey) {
         modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
         executeTofuCommands($filePath, $folderPath);
 
-
-        $pathScript = "../proxy/script.sh";
-        $ip = getIPfromID($vmID);
-        $port = getPortfromID($vmID);
-
-        $command = $pathScript . " add " . $userName . " " . $ip . " " . $port;
-
-        shell_exec($command);
-
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
         return false;
