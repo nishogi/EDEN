@@ -331,7 +331,7 @@ function getIPfromID($vmID) {
 
 // Function to obtain the port from a VM link to the ID
 function getPortfromID($vmID) {
-    $port = 10000 + $VMId;
+    $port = 10000 + $vmID;
     return $port;
 }
 
