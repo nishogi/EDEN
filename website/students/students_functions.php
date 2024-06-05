@@ -296,6 +296,15 @@ function createVM($VMname, $sshPublicKey) {
         modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
         executeTofuCommands($filePath, $folderPath);
 
+
+        $pathScript = "../proxy/script.sh";
+        $ip = getIPfromID($vmID);
+        $port = getPortfromID($vmID);
+
+        $command = $pathScript . " add " . $userName . " " . $ip . " " . $port;
+
+        shell_exec($command);
+
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
         return false;
@@ -305,6 +314,27 @@ function createVM($VMname, $sshPublicKey) {
 
     return $userName . " / " . $VMname . " / " . $sshPublicKey;
 }
+
+
+// Function to obtain the private IP from a VM link to the ID
+function getIPfromID($vmID) {
+    $totID = $vmID - 4000;
+
+    $ip24 = $totID / 256 + 2;
+
+    $ip32 = $totID % 256;
+
+    $IP = "192.168." . $ip24 . "." . $ip32;
+
+    return $IP;
+}
+
+// Function to obtain the port from a VM link to the ID
+function getPortfromID($vmID) {
+    $port = 10000 + $VMId;
+    return $port;
+}
+
 
 // Function to modify the variables in the tofu configuration file
 function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname) {
@@ -319,11 +349,16 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
     }
     fclose($file);
 
+    $IP = getIPfromID($vmID);
+
+    $IP = $IP . "/16";
+
     $lines[2]  = "clone_vm_id            = $cloneID\n";
     $lines[5]  = "cloudinit_ssh_keys     = [\"$sshPublicKey\"]\n";
     $lines[6]  = "cloudinit_user_account = \"$userName\"\n";
     $lines[18] = "vm_id                  = $vmID\n";
     $lines[21] = "vm_name                = \"$VMname\"\n";
+    $lines[24] = "ip                     = $IP";
 
     $file = fopen($filePath, "w");
     if (!$file) {

@@ -147,26 +147,11 @@
             }
         });
 
-    function confirmAccessVM(name) {
+    function confirmAccessVM(VMname, port, username) {
         Swal.fire({
-            title: 'Confirmation',
-            text: "Souhaitez-vous accéder à la VM : " + name + " ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non, annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`ajax_functions.php?action=deleteVM&name=${encodeURIComponent(name)}`)
-                    .then(() => {
-                        showLoadingSwal('Veuillez patienter', 'La VM est en cours de suppresion...');
-                        return pollVMStatus(name, null);
-                    })
-                    .then(() => {
-                        Swal.close();
-                        showSuccessSwal('VM supprimée !');
-                    });
-            }
+            title: 'Voici la commande à exécuter pour vous connecter à la VM :',
+            text: "ssh -p " + port + " " + username + "@" + VMname + ".eden.telecom-sudparis.eu",
+            icon: 'info',
         });
     }
 
@@ -261,15 +246,17 @@
                     $vmNamePattern = strval($_SERVER['REMOTE_USER']) . '-1';
     
                     $userVMs = getVMNames($vmNamePattern);
-    
+                    $userName = $_SERVER['REMOTE_USER'];
+
                     foreach ($userVMs as $vmName) {
                         $VMId = getVMId($vmName);
                         $status = checkVMStatus($VMId);
+                        $port = getPortfromID($VMId);
                         
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName')\">Accéder</button>";
+                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName, $port, $userName')\">Accéder</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
