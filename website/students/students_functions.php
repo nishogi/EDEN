@@ -293,8 +293,16 @@ function createVM($VMname, $sshPublicKey) {
         if ($cloneID === false) {
             throw new Exception("Failed to get VM ID for cloning");
         }
-        $f1 = modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
-        $f2 = executeTofuCommands($filePath, $folderPath);
+        modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
+        executeTofuCommands($filePath, $folderPath);
+
+        $pathScript = "../proxy/script.sh";
+        $ip = getIPfromID($vmID);
+        $port = getPortfromID($vmID);
+
+        $command = $pathScript . " add " . $userName . " " . $ip . " " . $port;
+
+        $result = shell_exec($command);
 
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
@@ -306,7 +314,7 @@ function createVM($VMname, $sshPublicKey) {
     $ID = getIPfromID($vmID);
     $port = getPortfromID($vmID);
 
-    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port . " / " . $f1 . " / " . $f2;
+    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port . " / " . $result;
 }
 
 
@@ -346,9 +354,6 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
     $IP = getIPfromID($vmID);
 
     $IP = $IP . "/16";
-
-    echo "IP :";
-    echo $IP;
 
     $lines[2]  = "clone_vm_id            = $cloneID\n";
     $lines[5]  = "cloudinit_ssh_keys     = [\"$sshPublicKey\"]\n";
