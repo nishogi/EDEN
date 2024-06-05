@@ -345,7 +345,9 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
 
     $IP = getIPfromID($vmID);
 
-    #$IP = $IP . "/16";
+    $IP = $IP . "/16";
+
+    $IP = "$IP";
 
     echo "IP :";
     echo $IP;
