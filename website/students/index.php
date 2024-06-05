@@ -267,7 +267,7 @@
                         $VMId = getVMId($vmName);
                         $status = checkVMStatus($VMId);
                         $port = getPortfromID($VMId);
-                        
+
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
@@ -292,8 +292,7 @@
 
                     // Lire les lignes du fichier et les stocker dans un tableau
                     $lignes = file($cheminFichier);
-                    
-                    echo createVM("CSC4101-mwilliot-1", "ssh_key");
+
 
                     echo "<ul>";
                     $cours = [];
@@ -316,7 +315,6 @@
                         if (existingVM($VMname) == false) {
                             # On vérifie si le template du cours existe
                             if (existingVM($cour) == true) {
-                                echo $VMname;
                                 echo "<li class='list-group-item'>$VMname";
                                 echo "<button class='btn btn-success boutonVM' onclick=\"confirmCreateVM('$VMname')\">Créer</button>";
                                 echo "</li>";
