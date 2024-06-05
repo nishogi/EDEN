@@ -147,10 +147,10 @@
             }
         });
 
-    function confirmAccessVM(VMname, port, username) {
+    function confirmAccessVM(VMname) {
         Swal.fire({
             title: 'Voici la commande à exécuter pour vous connecter à la VM :',
-            text: "ssh -p " + port + " " + username + "@" + VMname + ".eden.telecom-sudparis.eu",
+            text: "ssh -p " + VMname,
             icon: 'info',
         });
     }
@@ -256,7 +256,7 @@
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName', '$port', '$userName')\">Accéder</button>";
+                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName')\">Accéder</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
@@ -277,7 +277,8 @@
 
                     // Lire les lignes du fichier et les stocker dans un tableau
                     $lignes = file($cheminFichier);
-
+                    
+                    echo createVM("CSC4101-mwilliot-1", "ssh_key");
 
                     echo "<ul>";
                     $cours = [];
