@@ -147,11 +147,26 @@
             }
         });
 
-    function confirmAccessVM(VMname) {
+    function confirmAccessVM(name) {
         Swal.fire({
-            title: 'Voici la commande à exécuter pour vous connecter à la VM :',
-            text: "ssh -p " + VMname,
-            icon: 'info',
+            title: 'Confirmation',
+            text: "Souhaitez-vous vraiment arrêter la VM : " + name + " ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non, annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`ajax_functions.php?action=stopVM&name=${encodeURIComponent(name)}`)
+                    .then(() => {
+                        showLoadingSwal('Veuillez patienter', 'La VM est en cours d\'arrêt...');
+                        return pollVMStatus(name, 'stopped');
+                    })
+                    .then(() => {
+                        Swal.close();
+                        showSuccessSwal('VM arrêtée !');
+                    });
+            }
         });
     }
 

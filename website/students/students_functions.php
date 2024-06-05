@@ -303,7 +303,10 @@ function createVM($VMname, $sshPublicKey) {
         sem_release($sem_id);
     }
 
-    return $userName . " / " . $VMname . " / " . $sshPublicKey;
+    $ID = getIPfromID($vmID);
+    $port = getPortfromID($vmID);
+
+    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " $ID . " / " . $port;
 }
 
 
