@@ -306,7 +306,7 @@ function createVM($VMname, $sshPublicKey) {
     $ID = getIPfromID($vmID);
     $port = getPortfromID($vmID);
 
-    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " $ID . " / " . $port;
+    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port;
 }
 
 
