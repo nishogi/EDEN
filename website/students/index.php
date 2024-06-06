@@ -48,48 +48,80 @@
     }
 
     function confirmStartVM(name) {
-        Swal.fire({
-            title: 'Confirmation',
-            text: "Souhaitez-vous vraiment allumer la VM : " + name + " ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non, annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`ajax_functions.php?action=startVM&name=${encodeURIComponent(name)}`)
-                    .then(() => {
-                        showLoadingSwal('Veuillez patienter', 'La VM est en cours de démarrage...');
-                        return pollVMStatus(name, 'running');
-                    })
-                    .then(() => {
-                        Swal.close();
-                        showSuccessSwal('VM démarrée !');
-                    });
-            }
-        });
-    }
+    Swal.fire({
+        title: 'Confirmation',
+        text: "Souhaitez-vous vraiment allumer la VM : " + name + " ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Non, annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            showLoadingSwal('Veuillez patienter', 'La VM est en cours de démarrage...');
+            const timeout = setTimeout(() => {
+                Swal.close();
+                showErrorSwal('Le démarrage de la VM a pris trop de temps.');
+            }, 60000); // Timeout set to 60 seconds
 
-    function confirmStopVM(name) {
+            fetch(`ajax_functions.php?action=startVM&name=${encodeURIComponent(name)}`)
+                .then(() => {
+                    return pollVMStatus(name, 'running');
+                })
+                .then(() => {
+                    clearTimeout(timeout);
+                    Swal.close();
+                    showSuccessSwal('VM démarrée !');
+                })
+                .catch((error) => {
+                    clearTimeout(timeout);
+                    Swal.close();
+                    showErrorSwal('Erreur lors du démarrage de la VM.');
+                    console.error('Error:', error);
+                });
+        }
+    });
+}
+
+function confirmStopVM(name) {
+    Swal.fire({
+        title: 'Confirmation',
+        text: "Souhaitez-vous vraiment arrêter la VM : " + name + " ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Non, annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            showLoadingSwal('Veuillez patienter', 'La VM est en cours d\'arrêt...');
+            const timeout = setTimeout(() => {
+                Swal.close();
+                showErrorSwal('L\'arrêt de la VM a pris trop de temps.');
+            }, 120000); // Timeout set to 120 seconds
+
+            fetch(`ajax_functions.php?action=stopVM&name=${encodeURIComponent(name)}`)
+                .then(() => {
+                    return pollVMStatus(name, 'stopped');
+                })
+                .then(() => {
+                    clearTimeout(timeout);
+                    Swal.close();
+                    showSuccessSwal('VM arrêtée !');
+                })
+                .catch((error) => {
+                    clearTimeout(timeout);
+                    Swal.close();
+                    showErrorSwal('Erreur lors de l\'arrêt de la VM.');
+                    console.error('Error:', error);
+                });
+        }
+    });
+}
+
+    function confirmAccessVM(VMname, port, username) {
         Swal.fire({
-            title: 'Confirmation',
-            text: "Souhaitez-vous vraiment arrêter la VM : " + name + " ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non, annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`ajax_functions.php?action=stopVM&name=${encodeURIComponent(name)}`)
-                    .then(() => {
-                        showLoadingSwal('Veuillez patienter', 'La VM est en cours d\'arrêt...');
-                        return pollVMStatus(name, 'stopped');
-                    })
-                    .then(() => {
-                        Swal.close();
-                        showSuccessSwal('VM arrêtée !');
-                    });
-            }
+            title: "Avant de tenter d'accéder à votre VM, vérifier que son statut est running si ce n'est pas le cas alors allumez votre VM. Voici la commande à exécuter pour vous connecter à la VM :",
+            text: "ssh -p " + port + " " + username + "@" + VMname + ".eden.telecom-sudparis.eu",
+            icon: 'info',
         });
     }
 
@@ -103,71 +135,73 @@
         cancelButtonText: 'Non, annuler'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Envoi d'une requête AJAX pour supprimer la VM
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "ajax_functions.php?action=deleteVM&name=" + encodeURIComponent(name), true);
-            xhr.send();
+            showLoadingSwal('Veuillez patienter', 'La VM est en cours de suppression...');
+            const timeout = setTimeout(() => {
+                Swal.close();
+                showErrorSwal('La suppression de la VM a pris trop de temps.');
+            }, 120000); // Timeout set to 120 seconds
 
-            Swal.fire({
-                title: 'Veuillez patienter',
-                text: 'La VM est en cours de suppression...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            // Poll the VM status until it is confirmed to be deleted
-            var checkStatus = setInterval(function () {
-                var xhrStatus = new XMLHttpRequest();
-                xhrStatus.open("GET", "ajax_functions.php?action=checkVMStatus&name=" + encodeURIComponent(name), true);
-                xhrStatus.onreadystatechange = function() {
-                    if (xhrStatus.readyState === 4 && xhrStatus.status === 200) {
-                        var response = JSON.parse(xhrStatus.responseText);
-                        if (response.status === 'notfound') {
-                            clearInterval(checkStatus);
-                            Swal.close();
-                            location.reload();
-                        }
-                    }
-                };
-                xhrStatus.send();
-            }, 2000); // Check status every 2 seconds
+            fetch(`ajax_functions.php?action=deleteVM&name=${encodeURIComponent(name)}`)
+                .then(() => {
+                    return pollVMStatus(name, 'notfound');
+                })
+                .then(() => {
+                    clearTimeout(timeout);
+                    Swal.close();
+                    showSuccessSwal('VM supprimée !');
+                })
+                .catch((error) => {
+                    clearTimeout(timeout);
+                    Swal.close();
+                    showErrorSwal('Erreur lors de la suppression de la VM.');
+                    console.error('Error:', error);
+                });
         }
     });
 }
 
-    function confirmCreateVM(vmName) {
-        Swal.fire({
-            title: 'Clé SSH',
-            padding: '1rem',
-            input: 'textarea',
-            inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
-            inputPlaceholder: 'Entrez votre clé ssh publique ici...',
-            inputAttributes: {
-                'aria-label': 'Entrez votre clé ssh publique ici'
-            },
-            showCancelButton: true,
-        }).then((result) => {
-            if (result.isConfirmed && result.value) {
-                const sshPublicKey = result.value;
-                fetch("ajax_functions.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: `action=createVM&name=${encodeURIComponent(vmName)}&ssh_public_key=${encodeURIComponent(sshPublicKey)}`
-                }).then(() => {
-                    showLoadingSwal('Veuillez patienter', 'La VM est en cours de création...');
-                    return pollVMStatus(vmName, 'stopped');
-                }).then(() => {
-                    Swal.close();
-                    showSuccessSwal('VM créée avec succès et elle est en cours d\'exécution!');
-                });
-            }
-        });
+function confirmCreateVM(vmName) {
+    Swal.fire({
+        title: 'Clé SSH',
+        padding: '1rem',
+        input: 'textarea',
+        inputLabel: 'Veuillez nous transmettre votre clé ssh publique afin qu\'on puisse vous transmettre vos identifiants :',
+        inputPlaceholder: 'Entrez votre clé ssh publique ici...',
+        inputAttributes: {
+            'aria-label': 'Entrez votre clé ssh publique ici'
+        },
+        showCancelButton: true,
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            const sshPublicKey = result.value;
+            showLoadingSwal('Veuillez patienter', 'La VM est en cours de création...');
+            const timeout = setTimeout(() => {
+                Swal.close();
+                showErrorSwal('La création de la VM a pris trop de temps.');
+            }, 60000); // Timeout set to 60 seconds
 
-    }
+            fetch("ajax_functions.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `action=createVM&name=${encodeURIComponent(vmName)}&ssh_public_key=${encodeURIComponent(sshPublicKey)}`
+            }).then(() => {
+                return pollVMStatus(vmName, 'stopped');
+            }).then(() => {
+                clearTimeout(timeout);
+                Swal.close();
+                showSuccessSwal('VM créée avec succès et elle est en cours d\'exécution!');
+            }).catch((error) => {
+                clearTimeout(timeout);
+                Swal.close();
+                showErrorSwal('Erreur lors de la création de la VM.');
+                console.error('Error:', error);
+            });
+        }
+    });
+}
+
 </script>
   <style>
         body {
