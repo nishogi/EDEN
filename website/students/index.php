@@ -143,7 +143,7 @@ function confirmStopVM(name) {
 
             fetch(`ajax_functions.php?action=deleteVM&name=${encodeURIComponent(name)}`)
                 .then(() => {
-                    return (existingVM($VMname) == false);
+                    return (existingVM(name) == false);
                 })
                 .then(() => {
                     clearTimeout(timeout);
