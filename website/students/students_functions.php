@@ -310,8 +310,8 @@ function createVM($VMname, $sshPublicKey) {
         $port = getPortfromID($vmID);
 
         $command = $pathScript . " add " . $userName . " " . $ip . " " . $port;
-        echo $command;
-        $result = shell_exec($command);
+
+        shell_exec($command);
 
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
@@ -323,7 +323,7 @@ function createVM($VMname, $sshPublicKey) {
     $ID = getIPfromID($vmID);
     $port = getPortfromID($vmID);
 
-    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port . " / " . $result;
+    return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port;
 }
 
 

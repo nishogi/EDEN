@@ -184,7 +184,14 @@ function deleteVM($name) {
 
     curl_close($curl);
 
-    echo $response;
+    $pathScript = "../proxy/script.sh";
+    $userName = $_SERVER['REMOTE_USER'];
+    $ip = getIPfromID($VMId);
+    $port = getPortfromID($VMId);
+
+    $command = $pathScript . " rm " . $userName . " " . $ip . " " . $port;
+
+    shell_exec($command);
 }
 
 // Fonction pour savoir si la VM existe déjà ou pas
@@ -290,6 +297,14 @@ function createVM($VMname, $sshPublicKey) {
         // Exécuter les commandes tofu
         executeTofuCommands($filePath, $folderPath);
 
+        $pathScript = "../proxy/script.sh";
+        $ip = getIPfromID($vmID);
+        $port = getPortfromID($vmID);
+
+        $command = $pathScript . " add " . $userName . " " . $ip . " " . $port;
+
+        shell_exec($command);
+
     } catch (Exception $e) {
         echo "Erreur : " . $e->getMessage();
     } finally {
@@ -298,6 +313,24 @@ function createVM($VMname, $sshPublicKey) {
     }
 
     return $userName . " / " . $VMname . " / " . $sshPublicKey;
+}
+
+function getIPfromID($vmID) {
+    $totID = $vmID - 4000;
+
+    $ip24 = floor($totID / 256) + 2;
+
+    $ip32 = $totID - floor($totID / 256) * 256;
+
+    $IP = "192.168." . $ip24 . "." . $ip32;
+
+    return $IP;
+}
+
+// Function to obtain the port from a VM link to the ID
+function getPortfromID($vmID) {
+    $port = 10000 + $vmID;
+    return $port;
 }
 
 // Fonction permettant de modifier les variables dans le fichier de conf de tofu
@@ -314,12 +347,17 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
     }
     fclose($file);
 
+    $IP = getIPfromID($vmID);
+
+    $IP = $IP . "/16";
+
     // Modifier les lignes spécifiques
     $lines[2]  = "clone_vm_id            = $cloneID\n";
     $lines[5]  = "cloudinit_ssh_keys     = [\"$sshPublicKey\"]\n";
     $lines[6]  = "cloudinit_user_account = \"$userName\"\n";
     $lines[18] = "vm_id                  = $vmID\n";
     $lines[21] = "vm_name                = \"$VMname\"\n";
+    $lines[24] = "ip                     = \"$IP\"";
 
     // Écrire les lignes modifiées dans le fichier
     $file = fopen($filePath, "w");
@@ -352,10 +390,5 @@ function executeTofuCommands($filePath, $folderPath) {
     if ($applyOutput === null) {
         throw new Exception("Erreur lors de l'application de tofu.");
     }
-    echo "VM créée avec succès. Résultat : <pre>$initOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$planOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$applyOutput</pre>";
 }
 

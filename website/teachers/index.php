@@ -93,6 +93,14 @@
         });
     }
 
+    function confirmAccessVM(VMname, port, username) {
+        Swal.fire({
+            title: "Avant de tenter d'accéder à votre VM, vérifier que son statut est running si ce n'est pas le cas alors allumé votre VM. Voici la commande à exécuter pour vous connecter à la VM :",
+            text: "ssh -p " + port + " " + username + "@" + VMname + ".eden.telecom-sudparis.eu",
+            icon: 'info',
+        });
+    }
+
     function confirmDeleteVM(name) {
         Swal.fire({
             title: 'Confirmation',
@@ -257,13 +265,17 @@
                 foreach ($cours as $cour) {
                     // On vérifie si la VM existe déjà
                     $vmName = $cour;
+                    $userName = $_SERVER['REMOTE_USER'];
+
                     if (existingVM($vmName) == true) {
                         $VMId = getVMId($vmName);
                         $status = checkVMStatus($VMId);
+                        $port = getPortfromID($VMId);
+
                         echo "<li class='list-group-item'>";
                         echo "<b>$vmName</b>";
                         echo "<p>Statut : $status</p>";
-                        echo "<button class='btn btn-primary boutonVM'>Accéder</button>";
+                        echo "<button class='btn btn-primary boutonVM' onclick=\"confirmAccessVM('$vmName', '$port', '$userName')\">Accéder</button>";
                         echo "<button class='btn btn-success boutonVM' onclick=\"confirmStartVM('$vmName')\">Allumer</button>";
                         echo "<button class='btn btn-warning boutonVM' onclick=\"confirmStopVM('$vmName')\">Éteindre</button>";
                         echo "<button class='btn btn-danger boutonVM' onclick=\"confirmDeleteVM('$vmName')\">Supprimer</button>";
