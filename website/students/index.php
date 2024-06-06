@@ -95,7 +95,7 @@
 
     function confirmAccessVM(VMname, port, username) {
         Swal.fire({
-            title: 'Voici la commande à exécuter pour vous connecter à la VM :',
+            title: "Avant de tenter d'accéder à votre VM, vérifier que son statut est running si ce n'est pas le cas alors allumé votre VM. Voici la commande à exécuter pour vous connecter à la VM :",
             text: "ssh -p " + port + " " + username + "@" + VMname + ".eden.telecom-sudparis.eu",
             icon: 'info',
         });
@@ -241,6 +241,8 @@
                     ini_set('display_errors', 1);
 
                     include 'students_functions.php';
+
+                    echo createVM("IMG4101-mwilliot-1", "ssh");
 
                     // Format des noms de VM recherchés
                     $vmNamePattern = strval($_SERVER['REMOTE_USER']) . '-1';

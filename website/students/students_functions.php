@@ -182,6 +182,15 @@ function deleteVM($name) {
 
     curl_exec($curl);
     curl_close($curl);
+
+    $pathScript = "../proxy/script.sh";
+    $userName = $_SERVER['REMOTE_USER'];
+    $ip = getIPfromID($VMId);
+    $port = getPortfromID($VMId);
+
+    $command = $pathScript . " rm " . $userName . " " . $ip . " " . $port;
+
+    shell_exec($command);
 }
 
 // Function to check if the VM already exists
@@ -301,7 +310,7 @@ function createVM($VMname, $sshPublicKey) {
         $port = getPortfromID($vmID);
 
         $command = $pathScript . " add " . $userName . " " . $ip . " " . $port;
-
+        echo $command;
         $result = shell_exec($command);
 
     } catch (Exception $e) {
