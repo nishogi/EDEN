@@ -93,14 +93,6 @@
         });
     }
 
-    function confirmAccessVM(VMname, port, username) {
-        Swal.fire({
-            title: "Avant de tenter d'accéder à votre VM, vérifier que son statut est running si ce n'est pas le cas alors allumé votre VM. Voici la commande à exécuter pour vous connecter à la VM :",
-            text: "ssh -p " + port + " " + username + "@" + VMname + ".eden.telecom-sudparis.eu",
-            icon: 'info',
-        });
-    }
-
     function confirmDeleteVM(name) {
     Swal.fire({
         title: 'Confirmation',
