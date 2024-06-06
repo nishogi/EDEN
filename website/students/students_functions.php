@@ -261,7 +261,7 @@ function getNextAvailableVMID() {
 
     sort($existingVMIDs);
 
-    $nextAvailableID = 5000; // Starting ID for VMs
+    $nextAvailableID = 105; // Starting ID
     while (in_array($nextAvailableID, $existingVMIDs)) {
         $nextAvailableID++;
     }
@@ -399,5 +399,36 @@ function executeTofuCommands($filePath, $folderPath) {
         throw new Exception("Error during tofu apply.");
     }
 
+    // Remove ANSI color codes
+    $initOutput = strip_ansi_colors($initOutput);
+    $planOutput = strip_ansi_colors($planOutput);
+    $applyOutput = strip_ansi_colors($applyOutput);
+
+    // Convert newlines to HTML <br> tags
+    $initOutput = nl2br($initOutput);
+    $planOutput = nl2br($planOutput);
+    $applyOutput = nl2br($applyOutput);
+
+    echo <<<OUTPUT
+    <h2>Tofu Initialization Output:</h2>
+    <br>
+    <pre>$initOutput</pre>
+    <br>
+    <h2>---------------------------------------------------------------------------------------------------------------------------------</h2>
+    <br>
+    <h2>Tofu Plan Output:</h2>
+    <br>
+    <pre>$planOutput</pre>
+    <br>
+    <h2>---------------------------------------------------------------------------------------------------------------------------------</h2>
+    <br>
+    <h2>Tofu Apply Output:</h2>
+    <br>
+    <pre>$applyOutput</pre>
+    OUTPUT;
+}
+
+function strip_ansi_colors($string) {
+    return preg_replace('/\e[[][A-Za-z0-9];?[0-9]*m?/', '', $string);
 }
 ?>
