@@ -261,7 +261,7 @@ function getNextAvailableVMID() {
 
     sort($existingVMIDs);
 
-    $nextAvailableID = 105; // Starting ID
+    $nextAvailableID = 5000; // Starting ID
     while (in_array($nextAvailableID, $existingVMIDs)) {
         $nextAvailableID++;
     }
