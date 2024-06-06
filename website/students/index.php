@@ -242,8 +242,6 @@
 
                     include 'students_functions.php';
 
-                    echo createVM("IMG4101-mwilliot-1", "ssh");
-
                     // Format des noms de VM recherchés
                     $vmNamePattern = strval($_SERVER['REMOTE_USER']) . '-1';
     
