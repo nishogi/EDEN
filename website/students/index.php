@@ -26,7 +26,7 @@
             title: 'Succès!',
             text: text,
             icon: 'success',
-            timer: 2000
+            timer: 5000
         }).then(() => {
             location.reload();
         });
@@ -191,8 +191,7 @@ function confirmCreateVM(vmName) {
             }).then(() => {
                 clearTimeout(timeout);
                 Swal.close();
-                showSuccessSwal('VM créée avec succès et elle est en cours d\'exécution!');
-                location.reload();
+                showSuccessSwal('VM créée avec succès, merci de l\'allumer pour y accéder !');
             }).catch((error) => {
                 clearTimeout(timeout);
                 Swal.close();
