@@ -143,7 +143,7 @@ function confirmStopVM(name) {
 
             fetch(`ajax_functions.php?action=deleteVM&name=${encodeURIComponent(name)}`)
                 .then(() => {
-                    return pollVMStatus(name, 'notfound');
+                    return (existingVM($VMname) == false);
                 })
                 .then(() => {
                     clearTimeout(timeout);
@@ -192,6 +192,7 @@ function confirmCreateVM(vmName) {
                 clearTimeout(timeout);
                 Swal.close();
                 showSuccessSwal('VM créée avec succès et elle est en cours d\'exécution!');
+                location.reload();
             }).catch((error) => {
                 clearTimeout(timeout);
                 Swal.close();
