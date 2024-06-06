@@ -297,7 +297,7 @@ function createVM($VMname, $sshPublicKey) {
         // Exécuter les commandes tofu
         executeTofuCommands($filePath, $folderPath);
 
-        $pathScript = "../proxy/script.sh";
+        $pathScript = "../../proxy/script.sh";
         $ip = getIPfromID($vmID);
         $port = getPortfromID($vmID);
 
