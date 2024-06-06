@@ -371,8 +371,6 @@ function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmI
         fwrite($file, $line);
     }
     fclose($file);
-
-    return "modifvariable";
 }
 
 // Function to execute tofu commands to create the VM
@@ -391,14 +389,6 @@ function executeTofuCommands($filePath, $folderPath) {
     if ($applyOutput === null) {
         throw new Exception("Error during tofu apply.");
     }
-
-    echo "VM créée avec succès. Résultat : <pre>$initOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$planOutput</pre>";
-    echo "---------------------------------------------------------------------------------------------------------------------------------";
-    echo "VM créée avec succès. Résultat : <pre>$applyOutput</pre>";
-
-    return "tofucommand";
 
 }
 ?>
