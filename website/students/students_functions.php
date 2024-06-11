@@ -305,7 +305,7 @@ function createVM($VMname, $sshPublicKey) {
         modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname);
         executeTofuCommands($filePath, $folderPath);
 
-        $pathScript = "../../proxy/script.sh";
+        $pathScript = "/opt/EDEN/proxy/script.sh";
         $ip = getIPfromID($vmID);
         $port = getPortfromID($vmID);
 
