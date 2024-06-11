@@ -64,3 +64,4 @@ jobs:
           cp -R $TARGET_PATH $TARGET_PATH.bak
           cp -R ./website/* $TARGET_PATH
           echo "PVE_API_TOKEN=${{ secrets.PVE_API_TOKEN }}" >> $GITHUB_ENV
+          echo $PVE_API_TOKEN
