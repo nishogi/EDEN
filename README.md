@@ -1,6 +1,9 @@
 # EDEN
 Projet EDEN - 2024
 
+
+![Structure générale](docs/eden.png)
+
 ```mermaid
 graph TD
     A[Start] --> B[createVM]
