@@ -58,7 +58,9 @@ jobs:
       - name: Deploy EDEN
         env:
           TARGET_PATH: /var/www/edend12.imtbs-tsp.eu
+          PVE_API_TOKEN: ${{ secrets.PVE_API_TOKEN }}
         run: |
           rm -rf $TARGET_PATH.bak
           cp -R $TARGET_PATH $TARGET_PATH.bak
           cp -R ./website/* $TARGET_PATH
+          echo "PVE_API_TOKEN=${{ secrets.PVE_API_TOKEN }}" >> $GITHUB_ENV

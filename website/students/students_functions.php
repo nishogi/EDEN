@@ -1,10 +1,14 @@
 <?php
 
+function getAuthorizationHeader() {
+    return 'Authorization: PVEAPIToken=' . getenv('PVE_API_TOKEN');
+}
+
 // Function to retrieve VM names matching the given pattern
 function getVMNames($pattern) {
     $url = 'https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu';
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -40,7 +44,7 @@ function getVMNames($pattern) {
 function getVMId($name) {
     $url = 'https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu';
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -88,7 +92,7 @@ function startVM($name) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_HTTPHEADER => array(
-            "Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7"
+            getAuthorizationHeader()
         ),
     ));
 
@@ -116,7 +120,7 @@ function stopVM($name) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_HTTPHEADER => array(
-            "Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7"
+            getAuthorizationHeader()
         ),
     ));
 
@@ -128,7 +132,7 @@ function stopVM($name) {
 function checkVMStatus($VMId) {
     $url = "https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu/$VMId/status/current";
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -176,7 +180,7 @@ function deleteVM($name) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_CUSTOMREQUEST => "DELETE",
         CURLOPT_HTTPHEADER => array(
-            "Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7"
+            getAuthorizationHeader()
         ),
     ));
 
@@ -197,7 +201,7 @@ function deleteVM($name) {
 function existingVM($VMname) {
     $url = "https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu";
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -232,7 +236,7 @@ function existingVM($VMname) {
 function getNextAvailableVMID() {
     $url = 'https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu';
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -326,8 +330,7 @@ function createVM($VMname, $sshPublicKey) {
     return $userName . " / " . $VMname . " / " . $sshPublicKey . " / " . $ID . " / " . $port;
 }
 
-
-// Function to obtain the private IP from a VM link to the ID
+// Function to obtain the private IP from a VM linked to the ID
 function getIPfromID($vmID) {
     $totID = $vmID - 4000;
 
@@ -340,12 +343,11 @@ function getIPfromID($vmID) {
     return $IP;
 }
 
-// Function to obtain the port from a VM link to the ID
+// Function to obtain the port from a VM linked to the ID
 function getPortfromID($vmID) {
     $port = 10000 + $vmID;
     return $port;
 }
-
 
 // Function to modify the variables in the tofu configuration file
 function modifyVariablesFile($filePath, $cloneID, $sshPublicKey, $userName, $vmID, $VMname) {

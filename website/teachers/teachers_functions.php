@@ -1,11 +1,15 @@
 <?php
 
+function getAuthorizationHeader() {
+    return 'Authorization: PVEAPIToken=' . getenv('PVE_API_TOKEN');
+}
+
 // Fonction pour récupérer les noms de VM correspondant au motif donné en argument de la fonction
 function getVMNames($pattern) {
     // URL de l'API et paramètres
     $url = 'https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu';
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
     $cert_file = "/etc/certs/activ/eden.imtbs-tsp.eu/fullchain.pem";
 
@@ -50,7 +54,7 @@ function getVMId($name) {
     // On obtient l'ensemble des données au format JSON
     $url = 'https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu';
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -134,7 +138,7 @@ function checkVMStatus($VMId) {
     // On obtient l'ensemble des données au format JSON
     $url = "https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu/$VMId/status/current";
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -199,7 +203,7 @@ function existingVM($VMname) {
     // On obtient l'ensemble des données au format JSON
     $url = "https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu";
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
@@ -230,7 +234,7 @@ function getNextAvailableVMID() {
     // On obtient l'ensemble des données au format JSON
     $url = 'https://atlantis.int-evry.fr:8006/api2/json/nodes/atlantis/qemu';
     $headers = array(
-        'Authorization: PVEAPIToken=web@pve!web_token=d0ea3d01-dbd5-4cf0-a534-19b508cd81f7',
+        getAuthorizationHeader(),
     );
 
     $curl = curl_init($url);
